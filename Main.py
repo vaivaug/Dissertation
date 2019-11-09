@@ -1,76 +1,56 @@
 
 import pandas as pd
 import csv
-from split_data_pos_neg import initialise_file_columns
+from split_data_pos_neg import *
 
 
-
-from word_analysis_functions import *
-from textblob import TextBlob
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-
+# from textblob import TextBlob
+# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 data = {}
+counter_lung_cancer = 0
+counter_no_lung_cancer = 0
 
 
 def read_file(filedir):
 
     global data
-    # read data into pandas dataframe
-    data = pd.read_csv(filedir, delimiter=',', low_memory=False,
-                       nrows=1000)
+    data = pd.read_csv(filedir, delimiter=',', low_memory=False, nrows=1000)
 
 
-initialise_file_columns('positive.csv')
+def create_training_files():
 
-'''
-with open('negative.csv', 'a') as file_pos:
-    file_pos.write("TEXT,")
-'''
+    initialise_file_columns('positive.csv')
+    initialise_file_columns('negative.csv')
 
+    global counter_no_lung_cancer
+    global counter_lung_cancer
 
-def append_pos_lung_cancer(text):
-    with open('positive.csv', 'a') as file_pos:
-        file_pos_writer = csv.writer(file_pos, delimiter=',')
-        file_pos_writer.writerow([text, '1'])
+    for text in data['TEXT']:
+        if "lung cancer" in text:
+            counter_lung_cancer += 1
+            append_file('positive.csv', text, 1)
+        else:
+            counter_no_lung_cancer += 1
+            append_file('negative.csv', text, 0)
 
-'''
-def append_neg_lung_cancer(text):
-    with open('negative.csv', 'a') as file_neg:
-        file_neg.write(text)
-
-'''
 
 read_file('../NOTEEVENTS.csv')
-# data = data[['SUBJECT_ID', 'TEXT']]
 
-all_text = ""
-counter_lung_cancer = 0
-counter_no_lung_cancer = 0
+data = data.groupby(['SUBJECT_ID'], as_index=False)['TEXT'].sum()
+print(data)
 
-for text in data['TEXT']:
-    if "lung cancer" in text:
-        counter_lung_cancer += 1
-        append_pos_lung_cancer(text)
-    else:
-        counter_no_lung_cancer += 1
-        # append_neg_lung_cancer(text)
-    all_text += text
+create_training_files()
 
-
-positive_df = pd.read_csv('positive.csv')
+positive_df = read_file_to_pandas('positive.csv')
+negative_df = read_file_to_pandas('negative.csv')
 
 print("lung cancer contained in: ", counter_lung_cancer)
 
-
 print("positive rows: ", positive_df.shape[0])
+print("negative rows: ", negative_df.shape[0])
 
-# print("lung cancer not contained in: ", counter_no_lung_cancer, "   Number of rows in negative: ",
-#      sum(1 for row in csv.reader('negative.csv')))
-
-data = data.groupby(['SUBJECT_ID'], as_index=False)
-
-
+data = data.groupby(['SUBJECT_ID'], as_index=False)['TEXT'].sum()
+print(data)
 
 
 '''
@@ -82,8 +62,3 @@ for i in data['SUBJECT_ID']:
 print("patients counter out of 1000 rows: ", patients_counter)
 '''
 
-
-
-# frequency_distribution(all_text)
-# longer_words_appear_the_most(all_text, 7, 100)
-# get_bigrams(all_text)
