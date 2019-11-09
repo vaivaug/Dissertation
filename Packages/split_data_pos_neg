@@ -1,0 +1,14 @@
+import pandas as pd
+import csv
+
+
+def initialise_file_columns(filename):
+    with open(filename, 'a') as file:
+        file = csv.writer(file, delimiter=',')
+        file.writerow(['TEXT', 'VALUE'])
+
+
+
+def append_neg_lung_cancer(text):
+    with open('negative.csv', 'a') as file_neg:
+        file_neg.write(text)
