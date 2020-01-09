@@ -1,56 +1,38 @@
 
 import pandas as pd
 import csv
-from split_data_pos_neg import *
-
+from read_data import *
 
 # from textblob import TextBlob
 # from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-data = {}
-counter_lung_cancer = 0
-counter_no_lung_cancer = 0
+
+filedir_notes = '../NOTEEVENTS.csv'
+filedir_notes_subset = '../NOTEEVENTS_SUBSET.csv'
+filedir_admissions = '../ADMISSIONS.csv'
+
+df_notes = read_file(filedir_notes)
+df_admissions = read_file(filedir_admissions)
+
+diagnosis_contains_cancer = df_admissions[df_admissions['DIAGNOSIS'].str.contains('LUNG CA', na=False)]
+print(diagnosis_contains_cancer.count())
+
+df_notes_dis_sum = df_notes.loc[df_notes.CATEGORY == 'Discharge summary']
+print('Discharge summary', len(df_notes_dis_sum))
+
+result = get_df_merged(df_notes, df_admissions)
+result.head(100).to_csv('../MERGED.csv')
+
+print(result)
+print(len(result))
 
 
-def read_file(filedir):
-
-    global data
-    data = pd.read_csv(filedir, delimiter=',', low_memory=False, nrows=1000)
-
-
-def create_training_files():
-
-    initialise_file_columns('positive.csv')
-    initialise_file_columns('negative.csv')
-
-    global counter_no_lung_cancer
-    global counter_lung_cancer
-
-    for text in data['TEXT']:
-        if "lung cancer" in text:
-            counter_lung_cancer += 1
-            append_file('positive.csv', text, 1)
-        else:
-            counter_no_lung_cancer += 1
-            append_file('negative.csv', text, 0)
-
-
-read_file('../NOTEEVENTS.csv')
-
-data = data.groupby(['SUBJECT_ID'], as_index=False)['TEXT'].sum()
-print(data)
-
-create_training_files()
-
-positive_df = read_file_to_pandas('positive.csv')
-negative_df = read_file_to_pandas('negative.csv')
-
-print("lung cancer contained in: ", counter_lung_cancer)
-
-print("positive rows: ", positive_df.shape[0])
-print("negative rows: ", negative_df.shape[0])
-
-data = data.groupby(['SUBJECT_ID'], as_index=False)['TEXT'].sum()
-print(data)
+'''
+print(len(df_notes.groupby(['SUBJECT_ID'], as_index=False)['TEXT'].sum()))
+print(len(df_notes.groupby(['HADM_ID'], as_index=False)['TEXT'].sum()))
+print('admissions')
+print(len(df_admissions))
+print(len(df_admissions.groupby(['HADM_ID'], as_index=False).sum()))
+'''
 
 
 '''
@@ -61,4 +43,3 @@ for i in data['SUBJECT_ID']:
 
 print("patients counter out of 1000 rows: ", patients_counter)
 '''
-
