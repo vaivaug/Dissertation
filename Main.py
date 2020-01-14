@@ -1,7 +1,6 @@
 
 import pandas as pd
 import csv
-from read_data import *
 from prepare_data import get_clean_dataframe
 
 
