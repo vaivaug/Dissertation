@@ -3,24 +3,21 @@ Contains functions to read the data, select 'dischange summaries', merge tables,
 '''
 
 import pandas as pd
-import nltk
-nltk.download('punkt')
-
 
 filedir_notes = '../NOTEEVENTS.csv'
 filedir_adm = '../ADMISSIONS.csv'
 
 
 def get_clean_dataframe():
-
     adm = get_adm_dataframe()
     notes = get_notes_dataframe()
 
     # check there is only one discharge summary per person. Can delete this row later
     assert notes.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
-
+    print('goes')
     notes_adm = get_merged_dataframe(notes, adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
+    print('goes')
     notes_adm = get_dataframe_no_newborn(notes_adm, adm)
     return notes_adm
 
@@ -35,7 +32,7 @@ def get_adm_dataframe():
 
 def get_notes_dataframe():
     # read noteevenets table
-    notes = pd.read_csv(filedir_notes, low_memory=False)
+    notes = pd.read_csv(filedir_notes)
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
     # select the last 'discharge summary'.
