@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import roc_auc_score
+import numpy as np
 
 global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model
 
@@ -11,6 +12,10 @@ global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model
 def get_test_predicted_OUTPUT(train, test):
 
     global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model
+
+    # remove new line characters and nulls
+    train = get_clean_text(train)
+    test = get_clean_text(test)
 
     # vectorizer creation
     vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words())
@@ -20,6 +25,7 @@ def get_test_predicted_OUTPUT(train, test):
 
     train_TEXT = vectorizer.transform(train.TEXT.values)
     test_TEXT = vectorizer.transform(test.TEXT.values)
+    print(type(test_TEXT))
 
     train_OUTPUT = train.OUTPUT
     test_OUTPUT = test.OUTPUT
@@ -32,6 +38,16 @@ def get_test_predicted_OUTPUT(train, test):
     # test_OUTPUT_preds = model.predict_proba(test_TEXT)[:, 1]
 
     predicted_OUTPUT = model.predict(test_TEXT)
+
+    print('******************text*****************')
+    test.TEXT.to_csv('TEST_TEXT.csv')
+
+    print('******************TRUE OUTPUT*****************')
+    test.OUTPUT.to_csv('TEST_REAL_OUTPUT.csv')
+
+    print(test.OUTPUT.iloc[[2]])
+    print('******************PREDICTED OUTOUT*********************')
+    np.savetxt("test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
     return test_OUTPUT, predicted_OUTPUT
 
 

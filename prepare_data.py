@@ -14,10 +14,8 @@ def get_clean_dataframe():
 
     # check there is only one discharge summary per person. Can delete this row later
     assert notes.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
-    print('goes')
     notes_adm = get_merged_dataframe(notes, adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
-    print('goes')
     notes_adm = get_dataframe_no_newborn(notes_adm, adm)
     return notes_adm
 
@@ -37,8 +35,12 @@ def get_notes_dataframe():
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
     # select the last 'discharge summary'.
     '''TODO: try joining the discharge summaries where multiple exist'''
-    notes_dis_sum = (notes_dis_sum.groupby(['SUBJECT_ID', 'HADM_ID']).nth(-1)).reset_index()
+
+    notes_dis_sum = (notes_dis_sum.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
+
+    assert notes_dis_sum.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
     return notes_dis_sum
+
 
 '''
 # Select duplicate rows except first occurrence based on all columns

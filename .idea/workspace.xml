@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/confusion_matrix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/process_text.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sub_sampling_negatives.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train_test_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/prepare_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_test_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
