@@ -6,12 +6,12 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import roc_auc_score
 import numpy as np
 
-global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model
+global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT
 
 
 def get_test_predicted_OUTPUT(train, test):
 
-    global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model
+    global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT
 
     # remove new line characters and nulls
     train = get_clean_text(train)
@@ -40,18 +40,18 @@ def get_test_predicted_OUTPUT(train, test):
     predicted_OUTPUT = model.predict(test_TEXT)
 
     print('******************text*****************')
-    test.TEXT.to_csv('TEST_TEXT.csv')
+    test.TEXT.to_csv('../TEST_TEXT.csv')
 
     print('******************TRUE OUTPUT*****************')
-    test.OUTPUT.to_csv('TEST_REAL_OUTPUT.csv')
+    test.OUTPUT.to_csv('../TEST_REAL_OUTPUT.csv')
 
     print(test.OUTPUT.iloc[[2]])
     print('******************PREDICTED OUTOUT*********************')
-    np.savetxt("test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
+    np.savetxt("../test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
     return test_OUTPUT, predicted_OUTPUT
 
 
-def plot_AUC():
+def plot_AUC(test_OUTPUT):
     # no skill prediction
     ns_probs = [0 for _ in range(len(test_OUTPUT))]
 
@@ -82,3 +82,4 @@ def plot_AUC():
     plt.legend()
     # show the plot
     plt.show()
+

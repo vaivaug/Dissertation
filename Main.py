@@ -6,13 +6,17 @@ import nltk
 nltk.download('punkt')
 from CountVectorizer_LogisticRegression import get_test_predicted_OUTPUT, plot_AUC
 from confusion_matrix import *
+from sick_ones_to_file import write_sick_ones_to_file
 
 '''
-1. joined discharge summaries
+1. joined discharge summaries    DONE
 2. check which words have the biggest influence for 1 or 0 output prediction
 3. why empty discharge summary predicts lung cancer. Possibly some of the lung cancer diagnoses have am empty discharge sumary
 '''
 notes_adm = get_clean_dataframe()
+
+# write_sick_ones_to_file('../sick_ones.csv', notes_adm)
+
 print(len(notes_adm))
 
 train, test = get_train_test_datasets(notes_adm)
@@ -29,7 +33,7 @@ print("Accuracy:", metrics.accuracy_score(test_OUTPUT, predicted_OUTPUT))
 print("Precision:", metrics.precision_score(test_OUTPUT, predicted_OUTPUT))
 print("Recall:", metrics.recall_score(test_OUTPUT, predicted_OUTPUT))
 
-plot_AUC()
+plot_AUC(test_OUTPUT)
 
 
 

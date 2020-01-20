@@ -8,6 +8,7 @@ import pandas as pd
 def get_confusion_matrix(test_OUTPUT, predicted_OUTPUT):
 
     # confusion matrix
+
     cnf_matrix = metrics.confusion_matrix(test_OUTPUT, predicted_OUTPUT)
     print("confusion matrix: ")
     print(cnf_matrix)

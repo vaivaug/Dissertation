@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/sick_ones_to_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/prepare_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/confusion_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/confusion_matrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train_test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_test_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -158,9 +159,9 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="630" y="191" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1578347971710" />
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579104357057">
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579532793636">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579104357057" />
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579532793636" />
   </component>
 </project>
