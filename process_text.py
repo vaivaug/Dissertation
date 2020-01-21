@@ -6,7 +6,7 @@ def get_clean_text(data):
     # nan filled in with an empty space
     data.TEXT = data.TEXT.fillna(' ')
     data.TEXT = data.TEXT.str.replace('\n',' ')
-    # data.TEXT = data.TEXT.str.replace('\r',' ')
+    data.TEXT = data.TEXT.str.replace('\r',' ')
     return data
 
 

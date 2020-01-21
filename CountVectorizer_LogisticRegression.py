@@ -22,7 +22,7 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     print(len(test))
 
     # vectorizer creation
-    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 3))
+    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
 
     print("this can take longer")
     # learn the vocabulary dictionary
@@ -42,7 +42,7 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     list_words = vectorizer.get_feature_names()
 
     predicted_OUTPUT = np.where(model.predict_proba(test_TEXT)[:, 1] > threshold, 1, 0)
-    '''
+
     print('******************text*****************')
     test.TEXT.to_csv('../TEST_TEXT.csv')
 
@@ -53,7 +53,7 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     print('******************PREDICTED OUTOUT*********************')
     np.savetxt("../test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
    
-    '''
+
     return test_OUTPUT, predicted_OUTPUT
 
 

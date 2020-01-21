@@ -7,6 +7,7 @@ nltk.download('punkt')
 from CountVectorizer_LogisticRegression import get_test_predicted_OUTPUT, plot_AUC, plot_word_importance
 from confusion_matrix import *
 from sick_ones_to_file import write_sick_ones_to_file
+from over_sampling_positives import get_over_sampling_positives_data
 
 '''
 1. joined discharge summaries    DONE
@@ -28,9 +29,11 @@ print(len(notes_adm))
 # all data split into train and test
 train, test = get_train_test_datasets(notes_adm)
 
-train = get_sub_sampling_negatives_data(train)
 
-test_OUTPUT, predicted_OUTPUT = get_test_predicted_OUTPUT(train, test, threshold=0.4)
+# train = get_sub_sampling_negatives_data(train)
+train = get_over_sampling_positives_data(train)
+
+test_OUTPUT, predicted_OUTPUT = get_test_predicted_OUTPUT(train, test, threshold=0.35)
 
 plot_word_importance()
 # confusion matrix
