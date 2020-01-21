@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/process_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/process_text.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train_test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_test_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
