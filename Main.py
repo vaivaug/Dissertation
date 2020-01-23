@@ -23,6 +23,8 @@ For AUC diagram, add diagram AUC = , Confidence intervals
 
 notes_adm = get_clean_dataframe()
 notes_adm = get_data_with_age_column(notes_adm)
+print(notes_adm.AGE.value_counts().to_csv('counts.csv'))
+print('no age: ', notes_adm.isna().sum())
 
 write_sick_ones_to_file('../sick_ones.csv', notes_adm)
 

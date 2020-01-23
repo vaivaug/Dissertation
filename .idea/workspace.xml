@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/age.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/prepare_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_test_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/age.py" beforeDir="false" afterPath="$PROJECT_DIR$/age.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +33,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="settings.editor.selected.configurable" value="terminal" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -121,15 +118,6 @@
     </task>
     <servers />
   </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-  </component>
   <component name="WindowStateProjectService">
     <state x="589" y="247" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578571587875">
       <screen x="70" y="27" width="1850" height="1053" />
@@ -159,13 +147,13 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state width="1377" height="283" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1578571949048" />
-    <state x="630" y="191" width="1022" height="737" key="SettingsEditor" timestamp="1578347971710">
+    <state x="106" y="223" width="1022" height="737" key="SettingsEditor" timestamp="1579802830090">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="630" y="191" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1578347971710" />
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579698675741">
+    <state x="106" y="223" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1579802830090" />
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579802701071">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579698675741" />
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579802701071" />
   </component>
 </project>

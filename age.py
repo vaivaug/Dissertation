@@ -1,5 +1,6 @@
 import numpy as np
 import re, datetime
+from dateutil.relativedelta import relativedelta
 
 
 def get_data_with_age_column(data):
@@ -8,7 +9,9 @@ def get_data_with_age_column(data):
 
     for index, row in data.iterrows():
         print(row['TEXT'])
-        get_age_date_of_birth(row['TEXT'])
+        age = get_age_from_date_of_birth(row['TEXT'])
+        if age is not None:
+            data.set_value(index, 'AGE', age)
 
     return data
 
@@ -18,7 +21,7 @@ def get_data_with_age_column(data):
 3.  search for age'''
 
 
-def get_age_date_of_birth(text):
+def get_age_from_date_of_birth(text):
 
     word = r"\W*([\w]+)"
     date_of_birth_string = re.search(r'\W*{}{}'.format("Date of Birth", word * 4), text, re.IGNORECASE)
@@ -26,32 +29,20 @@ def get_age_date_of_birth(text):
     # date of birth contained inside text
     if date_of_birth_string is not None:
 
-        date_of_birth_string = date_of_birth_string.group(0)
-
         # get discharge date and subtract date of birth to get age
-        discharge_date_string = re.search(r'\W*{}{}'.format("Discharge Date", word * 4), text, re.IGNORECASE).group(0)
+        discharge_date_string = re.search(r'\W*{}{}'.format("Discharge Date", word * 4), text, re.IGNORECASE)
 
-        date_of_birth = re.search(r'\d{4}-\d{1,2}-\d{1,2}', date_of_birth_string)
-        '''if date_of_birth is None:
-            date_of_birth = re.search(r'\d{4}-\d{1}-\d{2}', date_of_birth_string)
-        if date_of_birth is None:
-            date_of_birth = re.search(r'\d{4}-\d{1}-\d{1}', date_of_birth_string)
-        if date_of_birth is None:
-            date_of_birth = re.search(r'\d{4}-\d{2}-\d{1}', date_of_birth_string)'''
+        if discharge_date_string is not None:
 
+            date_of_birth = re.search(r'\d{4}-\d{1,2}-\d{1,2}', date_of_birth_string.group())
+            discharge_date = re.search(r'\d{4}-\d{1,2}-\d{1,2}', discharge_date_string.group())
+            if date_of_birth is not None and discharge_date is not None:
+                age = relativedelta(datetime.datetime.strptime(discharge_date.group(), '%Y-%m-%d').date(),
+                                    datetime.datetime.strptime(date_of_birth.group(), '%Y-%m-%d').date()).years
+                if age >= 0:
+                    return age
 
-        discharge_date = re.search(r'\d{4}-\d{1,2}-\d{1,2}', discharge_date_string)
-        '''if discharge_date is None:
-            discharge_date = re.search(r'\d{4}-\d{1}-\d{2}', discharge_date_string)
-        if discharge_date is None:
-            discharge_date = re.search(r'\d{4}-\d{1}-\d{1}', discharge_date_string)
-        if discharge_date is None:
-            discharge_date = re.search(r'\d{4}-\d{2}-\d{1}', discharge_date_string)'''
-
-        print(date_of_birth)
-        print(discharge_date)
-
-
+    return None
 
 
 def search(text, n):
