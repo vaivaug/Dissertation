@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import roc_auc_score
 import numpy as np
+from imblearn.over_sampling import SMOTE
+import pandas as pd
 import collections
 
 global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT, list_words
 
 
-def get_test_predicted_OUTPUT(train, test, threshold):
+def get_test_predicted_OUTPUT(train, test, threshold, smote):
 
     global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT, list_words
 
@@ -35,6 +37,12 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     train_OUTPUT = train.OUTPUT
     test_OUTPUT = test.OUTPUT
 
+    if smote:
+        sm = SMOTE()
+        train_TEXT, train_OUTPUT = sm.fit_sample(train_TEXT, train_OUTPUT)
+
+        print(train_OUTPUT.value_counts())
+
     # logistic regression
     model = LogisticRegression(C=0.0001, penalty='l2')
     model.fit(train_TEXT, train_OUTPUT)
@@ -42,6 +50,7 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     list_words = vectorizer.get_feature_names()
 
     predicted_OUTPUT = np.where(model.predict_proba(test_TEXT)[:, 1] > threshold, 1, 0)
+
 
     print('******************text*****************')
     test.TEXT.to_csv('../TEST_TEXT.csv')
@@ -52,7 +61,6 @@ def get_test_predicted_OUTPUT(train, test, threshold):
     print(test.OUTPUT.iloc[[2]])
     print('******************PREDICTED OUTOUT*********************')
     np.savetxt("../test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
-   
 
     return test_OUTPUT, predicted_OUTPUT
 

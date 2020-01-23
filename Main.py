@@ -8,6 +8,7 @@ from CountVectorizer_LogisticRegression import get_test_predicted_OUTPUT, plot_A
 from confusion_matrix import *
 from sick_ones_to_file import write_sick_ones_to_file
 from over_sampling_positives import get_over_sampling_positives_data
+from age import get_data_with_age_column
 
 '''
 1. joined discharge summaries    DONE
@@ -16,24 +17,32 @@ from over_sampling_positives import get_over_sampling_positives_data
 4. add ngram_range=(1,3) inside CountVectorizer
 5. look into which files are at the top right
 6. remove empty ones from all data
+for friday: age, sex, AUC, 
+For AUC diagram, add diagram AUC = , Confidence intervals
 '''
+
 notes_adm = get_clean_dataframe()
-notes_adm.TEXT = notes_adm.TEXT.str.replace('\n','')
-notes_adm['TEXT'].replace('', np.nan, inplace=True)
-notes_adm.dropna(subset=['TEXT'], inplace=True)
+notes_adm = get_data_with_age_column(notes_adm)
 
 write_sick_ones_to_file('../sick_ones.csv', notes_adm)
 
 print(len(notes_adm))
 
+'''values of parameters to be pressed in UI'''
+threshold = 0.4
+smote_selected = False
+sub_sample_negatives_selected = True
+over_sample_positives_selected = False
+
 # all data split into train and test
 train, test = get_train_test_datasets(notes_adm)
 
+if sub_sample_negatives_selected:
+    train = get_sub_sampling_negatives_data(train)
+elif over_sample_positives_selected:
+    train = get_over_sampling_positives_data(train)
 
-# train = get_sub_sampling_negatives_data(train)
-train = get_over_sampling_positives_data(train)
-
-test_OUTPUT, predicted_OUTPUT = get_test_predicted_OUTPUT(train, test, threshold=0.35)
+test_OUTPUT, predicted_OUTPUT = get_test_predicted_OUTPUT(train, test, threshold=threshold, smote=smote_selected)
 
 plot_word_importance()
 # confusion matrix

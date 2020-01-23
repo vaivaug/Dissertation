@@ -1,7 +1,7 @@
 '''
 Contains functions to read the data, select 'dischange summaries', merge tables, add Output column
 '''
-
+import numpy as np
 import pandas as pd
 
 filedir_notes = '../NOTEEVENTS.csv'
@@ -17,6 +17,11 @@ def get_clean_dataframe():
     notes_adm = get_merged_dataframe(notes, adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
     notes_adm = get_dataframe_no_newborn(notes_adm, adm)
+
+    notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
+    notes_adm['TEXT'].replace(' ', np.nan, inplace=True)
+    notes_adm.dropna(subset=['TEXT'], inplace=True)
+
     return notes_adm
 
 
