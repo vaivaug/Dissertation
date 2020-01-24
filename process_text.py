@@ -25,7 +25,7 @@ def get_stop_words():
                  'were','you','pt','pm','by','be','had','your','this','date',
                  'from','there','an','that','p','are','have','has','h','but','o',
                  'namepattern','which','every','also', 'should', 'if', 'it', 'been',
-                 'who', 'during', 'any', 'c', 'ed', 'd', 'x']
+                 'who', 'during', 'any', 'c', 'd', 'x']
     return my_stop_words
 
 

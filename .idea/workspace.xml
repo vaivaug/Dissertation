@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/age.py" beforeDir="false" afterPath="$PROJECT_DIR$/age.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/process_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/process_text.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,9 +152,9 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="106" y="223" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1579802830090" />
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579802701071">
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579875328290">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579802701071" />
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579875328290" />
   </component>
 </project>
