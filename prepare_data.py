@@ -3,6 +3,9 @@ Contains functions to read the data, select 'dischange summaries', merge tables,
 '''
 import numpy as np
 import pandas as pd
+from spell_checker import get_correctly_spelled
+import math
+from spellchecker import SpellChecker
 
 filedir_notes = '../NOTEEVENTS.csv'
 filedir_adm = '../ADMISSIONS.csv'
@@ -15,7 +18,22 @@ def get_clean_dataframe():
     # check there is only one discharge summary per person. Can delete this row later
     assert notes.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
     notes_adm = get_merged_dataframe(notes, adm)
+
+    notes_adm = get_correctly_spelled_dataframe(notes_adm)
+
+    '''
+    for i, row in notes_adm.iterrows():
+        print('i: ', i)
+        text = str(row.DIAGNOSIS)
+
+        if text != 'nan':
+           # print('text before: ', text)
+            text = get_correctly_spelled(text)
+
+    '''
+
     notes_adm = get_dataframe_with_outputs(notes_adm)
+
     notes_adm = get_dataframe_no_newborn(notes_adm, adm)
 
     notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
@@ -66,6 +84,33 @@ def get_merged_dataframe(notes, adm):
     return notes_adm
 
 
+def get_correctly_spelled_dataframe(notes_adm):
+    '''return datagrame with DIAGNOSIS column correctly spelled'''
+
+   # notes_adm['DIAGNOSIS'] = notes_adm['DIAGNOSIS'].str.replace(';', ' ')
+
+    dictionary = notes_adm.DIAGNOSIS.str.cat(sep=' ')
+    dictionary = dictionary.replace(';', ' ')
+    print(dictionary)
+    # form string of all diagnoses. Use it as our dictionary
+    # print(notes_adm.DIAGNOSIS.str.cat(sep=' '))
+
+    spell = SpellChecker()
+    spell.word_frequency.load_text(dictionary, tokenizer=None)
+    print('goes')
+    print(type(dictionary))
+
+    for i, row in notes_adm.iterrows():
+        print('i: ', i)
+        text = str(row.DIAGNOSIS)
+
+        if text != 'nan':
+            # print('text before: ', text)
+            text = get_correctly_spelled(text, spell)
+
+    return notes_adm
+
+
 def get_dataframe_with_outputs(notes_adm):
     '''TODO: can be improved by adding more keywords meaning lung cancer.'''
     notes_adm['OUTPUT'] = (notes_adm.DIAGNOSIS.str.contains('LUNG CA') |
@@ -77,6 +122,14 @@ def get_dataframe_with_outputs(notes_adm):
     return notes_adm
 
 
+'''
+   notes_adm.DIAGNOSIS.str.contains('MESOTHELIOMA') |
+                                notes_adm.DIAGNOSIS.str.contains('LUNG NEOPLASM') |
+                                notes_adm.DIAGNOSIS.str.contains('MALIGNANT PLEURAL EFFUSION') |
+                                notes_adm.DIAGNOSIS.str.contains('SMALL CELL CANCER')
+'''
+
+
 def get_dataframe_no_newborn(notes_adm, adm):
     # remove newborn
     notes_adm_final = notes_adm[notes_adm.DIAGNOSIS.str.contains('NEWBORN')==False]
@@ -85,4 +138,6 @@ def get_dataframe_no_newborn(notes_adm, adm):
     # check number of rows is the same. Can delete later
     assert len(adm) == len(notes_adm), 'Number of rows is higher'
     return notes_adm_final
+
+
 

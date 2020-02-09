@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/spell_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/CountVectorizer_LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/age.py" beforeDir="false" afterPath="$PROJECT_DIR$/age.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/process_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/process_text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/counts.csv" beforeDir="false" afterPath="$PROJECT_DIR$/counts.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/prepare_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,9 +156,9 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="106" y="223" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1579802830090" />
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1579875328290">
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog" timestamp="1581259081503">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579875328290" />
+    <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1581259081503" />
   </component>
 </project>

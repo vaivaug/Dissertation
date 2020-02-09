@@ -22,6 +22,20 @@ def get_test_predicted_OUTPUT(train, test, threshold, smote):
     print('lengths:')
     print(len(train))
     print(len(test))
+    '''
+    import scipy.sparse as sp
+
+    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
+    subject_vectors = vectorizer.fit_transform(train.TEXT.values)
+
+   # body_vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
+    #body_vectors = body_vectorizer.fit_transform(train.AGE)
+
+    train_TEXT = sp.hstack([subject_vectors,
+                            train['AGE']])
+
+    test_TEXT = vectorizer.transform(test.TEXT.values)
+    '''
 
     # vectorizer creation
     vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
@@ -32,6 +46,7 @@ def get_test_predicted_OUTPUT(train, test, threshold, smote):
 
     # return term-document matrix
     train_TEXT = vectorizer.fit_transform(train.TEXT.values)
+    
     test_TEXT = vectorizer.transform(test.TEXT.values)
 
     train_OUTPUT = train.OUTPUT

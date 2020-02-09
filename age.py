@@ -14,7 +14,7 @@ def get_data_with_age_column(data):
 
         if age is None:
             # get age from inside of text
-            age = get_age_from_text(" ".join(row['TEXT'].split()[:100]), 3)
+            age = get_age_from_text(" ".join(row['TEXT'].split()[:200]), 3)
 
         data.set_value(index, 'AGE', age)
 
@@ -59,8 +59,8 @@ def get_age_from_date_of_birth(text):
 def get_age_from_text(text, n):
     '''Searches for text, and retrieves n words either side of the text, which are retuned seperatly'''
     word = r"\W*([\w]+)"
-    print('TEXT:')
-    print(text)
+  #  print('TEXT:')
+   # print(text)
 
     age = get_age_search_word(text, "year", n)
 
@@ -69,6 +69,9 @@ def get_age_from_text(text, n):
 
     if age is None:
         age = get_age_search_word(text, "y/o", n)
+
+    if age is None:
+        age = get_age_search_word(text, "y.o", n)
 
     if age is None:
         age = get_age_search_word(text, "age", n)
@@ -89,13 +92,13 @@ def get_age_from_text(text, n):
         if age is not None:
             age = age.group(0)[:2]
 
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEEEEEEEEE', age)
+    # print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEEEEEEEEE', age)
     return age
 
 
 def get_age_search_word(text, search_word, n):
-    print('text ', text)
-    print('word', search_word)
+    #print('text ', text)
+    #print('word', search_word)
 
     word = r"\W*([\w]+)"
     age = re.search(r'{}\W*{}{}'.format(word * n, search_word, word * n), text, re.IGNORECASE)

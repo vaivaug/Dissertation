@@ -10,6 +10,7 @@ from sick_ones_to_file import write_sick_ones_to_file
 from over_sampling_positives import get_over_sampling_positives_data
 from age import get_data_with_age_column
 
+
 '''
 1. joined discharge summaries    DONE
 2. check which words have the biggest influence for 1 or 0 output prediction DONE
@@ -19,18 +20,33 @@ from age import get_data_with_age_column
 6. remove empty ones from all data
 for friday: age, sex, AUC, 
 For AUC diagram, add diagram AUC = , Confidence intervals
+
+7. create my own diagnosis dictionary
+8. check if corrections are fair
 '''
 
 notes_adm = get_clean_dataframe()
-notes_adm = get_data_with_age_column(notes_adm)
-print(notes_adm.AGE.value_counts().to_csv('counts.csv'))
-print('no age: ', notes_adm.AGE.isna().sum())
 
+
+notes_adm['DIAGNOSIS'] = notes_adm['DIAGNOSIS'].str.replace(';', ' ')
+print(notes_adm.DIAGNOSIS.str.cat(sep=' '))
+
+
+# notes_adm = get_data_with_age_column(notes_adm)
+#print(notes_adm.AGE.value_counts().to_csv('counts.csv'))
+#print('no age: ', notes_adm.AGE.isna().sum())
+
+#print('length before dropping empty ages: ', len(notes_adm))
+# drop rows where age value is nan
+#notes_adm = notes_adm[notes_adm.AGE.notnull()]
+#print('length after dropping empty ages: ', len(notes_adm))
+'''
+print('number of cancer sick people: ', notes_adm.OUTPUT.value_counts())
 write_sick_ones_to_file('../sick_ones.csv', notes_adm)
 
 print(len(notes_adm))
 
-'''values of parameters to be pressed in UI'''
+# values of parameters to be pressed in UI
 threshold = 0.4
 smote_selected = False
 sub_sample_negatives_selected = True
@@ -57,6 +73,6 @@ print("Recall:", metrics.recall_score(test_OUTPUT, predicted_OUTPUT))
 
 plot_AUC(test_OUTPUT)
 
-
+'''
 
 
