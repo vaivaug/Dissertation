@@ -19,19 +19,7 @@ def get_clean_dataframe():
     assert notes.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
     notes_adm = get_merged_dataframe(notes, adm)
 
-    notes_adm = get_correctly_spelled_dataframe(notes_adm)
-
-    '''
-    for i, row in notes_adm.iterrows():
-        print('i: ', i)
-        text = str(row.DIAGNOSIS)
-
-        if text != 'nan':
-           # print('text before: ', text)
-            text = get_correctly_spelled(text)
-
-    '''
-
+    # notes_adm = get_correctly_spelled_dataframe(notes_adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
 
     notes_adm = get_dataframe_no_newborn(notes_adm, adm)
@@ -117,7 +105,17 @@ def get_dataframe_with_outputs(notes_adm):
                                 (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
                                 notes_adm.DIAGNOSIS.str.contains('TUMOR', na=False)) |
                                 (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
-                                notes_adm.DIAGNOSIS.str.contains('CANCER', na=False))
+                                notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
+                                notes_adm.DIAGNOSIS.str.contains('MESOTHELIOMA') |
+                                notes_adm.DIAGNOSIS.str.contains('LUNG NEOPLASM') |
+                                notes_adm.DIAGNOSIS.str.contains('MALIGNANT PLEURAL EFFUSION') |
+                                (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
+                                notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
+                                (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
+                                notes_adm.DIAGNOSIS.str.contains('CARCINOMA', na=False)) |
+                                notes_adm.DIAGNOSIS.str.contains('SMALL CELL LUNG CA', na=False) |
+                                notes_adm.DIAGNOSIS.str.contains('LOBE CA', na=False)
+
                                 ).astype('int')
     return notes_adm
 

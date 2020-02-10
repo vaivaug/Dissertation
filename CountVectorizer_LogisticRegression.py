@@ -38,7 +38,7 @@ def get_test_predicted_OUTPUT(train, test, threshold, smote):
     '''
 
     # vectorizer creation
-    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
+    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 4))
 
     print("this can take longer")
     # learn the vocabulary dictionary
@@ -68,6 +68,7 @@ def get_test_predicted_OUTPUT(train, test, threshold, smote):
 
 
     print('******************text*****************')
+    print(test)
     test.TEXT.to_csv('../TEST_TEXT.csv')
 
     print('******************TRUE OUTPUT*****************')
@@ -75,10 +76,44 @@ def get_test_predicted_OUTPUT(train, test, threshold, smote):
 
     print(test.OUTPUT.iloc[[2]])
     print('******************PREDICTED OUTOUT*********************')
+    print('predicted output: ', predicted_OUTPUT)
+    print(type(predicted_OUTPUT))
     np.savetxt("../test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
+
+    get_sick_predicted_not_sick(test, predicted_OUTPUT)
 
     return test_OUTPUT, predicted_OUTPUT
 
+
+
+def get_sick_predicted_not_sick(test, predicted_OUTPUT):
+    sick_predicted_not_sick = 0
+    sick_predicted_sick = 0
+    not_sick_predicted_not_sick = 0
+    not_sick_predicted_sick = 0
+    print('length of test: ', len(test.index))
+    print('length of predicted output: ', len(predicted_OUTPUT))
+    row_number = 0
+    for index, row in test.iterrows():
+        if row['OUTPUT'] == 1 and predicted_OUTPUT[row_number] == 0:
+            sick_predicted_not_sick+=1
+            print('missed: ')
+            print(row)
+            print(row['HADM_ID'])
+            print(row['TEXT'])
+        elif row['OUTPUT'] == 1 and predicted_OUTPUT[row_number] == 1:
+            sick_predicted_sick +=1
+        elif row['OUTPUT'] == 0 and predicted_OUTPUT[row_number] == 0:
+            not_sick_predicted_not_sick += 1
+        elif row['OUTPUT'] == 0 and predicted_OUTPUT[row_number] == 1:
+            not_sick_predicted_sick += 1
+        row_number += 1
+
+    print('sick_predicted_not_sick: ', sick_predicted_not_sick)
+    print("sick_predicted_sick: ", sick_predicted_sick)
+    print('not_sick_predicted_not_sick: ', not_sick_predicted_not_sick)
+    print('not_sick_predicted_sick: ', not_sick_predicted_sick)
+    print('sum: ', not_sick_predicted_sick+not_sick_predicted_not_sick+sick_predicted_sick+sick_predicted_not_sick)
 
 def plot_AUC(test_OUTPUT):
     # no skill prediction
