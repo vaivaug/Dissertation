@@ -1,17 +1,20 @@
-'''
-Contains functions to read the data, select 'dischange summaries', merge tables, add Output column
-'''
+"""
+Contains functions to read the data, select 'discharge summaries', merge tables, add Output column
+"""
 import numpy as np
 import pandas as pd
-from spell_checker import get_correctly_spelled
+# from spell_checker import get_correctly_spelled
 import math
-from spellchecker import SpellChecker
+# from spellchecker import SpellChecker
 
 filedir_notes = '../NOTEEVENTS.csv'
 filedir_adm = '../ADMISSIONS.csv'
 
 
 def get_clean_dataframe():
+    """Return pandas dataframe
+    Clean dataframe containing only the information we are interested in
+    """
     adm = get_adm_dataframe()
     notes = get_notes_dataframe()
 
@@ -32,7 +35,9 @@ def get_clean_dataframe():
 
 
 def get_adm_dataframe():
-    # read admissions table
+    """Return pandas dataframe
+    Read admissions table
+    """
     adm = pd.read_csv(filedir_adm)
     adm = adm.sort_values(['SUBJECT_ID'])
     adm = adm.reset_index(drop=True)
@@ -40,13 +45,23 @@ def get_adm_dataframe():
 
 
 def get_notes_dataframe():
-    # read noteevenets table
+    """Return pandas dataframe
+    Read noteevents table, select discharge summaries. Join then if multiple exist
+    """
     notes = pd.read_csv(filedir_notes)
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
-    # select the last 'discharge summary'.
-    '''TODO: try joining the discharge summaries where multiple exist'''
+    # join the discharge summaries where multiple exist
 
+    duplicated = notes_dis_sum[notes_dis_sum.duplicated(subset=['HADM_ID'], keep=False)]
+    duplicated = (duplicated.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
+    print('duplicated length: ', len(duplicated))
+    duplicated.to_csv('DUPLICATED.csv')
+
+    print("Duplicate Rows except first occurrence based on all columns are :")
+    print(duplicated)
+
+    # join discharge summaries
     notes_dis_sum = (notes_dis_sum.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
 
     assert notes_dis_sum.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
