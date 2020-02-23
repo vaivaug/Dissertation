@@ -1,32 +1,26 @@
 """
-Contains functions to read the data, select 'discharge summaries', merge tables, add Output column
+Contains functions to read the data, select 'discharge summaries', merge tables, add add the Output column
 """
 import numpy as np
 import pandas as pd
-# from spell_checker import get_correctly_spelled
-import math
-# from spellchecker import SpellChecker
 
 filedir_notes = '../NOTEEVENTS.csv'
 filedir_adm = '../ADMISSIONS.csv'
 
 
 def get_clean_dataframe():
-    """Return pandas dataframe
-    Clean dataframe containing only the information we are interested in
+    """ :return: pandas dataframe
+
+    Clean dataframe to contain only the information we are interested in
     """
     adm = get_adm_dataframe()
     notes = get_notes_dataframe()
 
-    # check there is only one discharge summary per person. Can delete this row later
-    assert notes.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
     notes_adm = get_merged_dataframe(notes, adm)
-
-    # notes_adm = get_correctly_spelled_dataframe(notes_adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
+    notes_adm = get_dataframe_no_newborn(notes_adm)
 
-    notes_adm = get_dataframe_no_newborn(notes_adm, adm)
-
+    # clean the TEXT column, drop rows with empty discharge summaries
     notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
     notes_adm['TEXT'].replace(' ', np.nan, inplace=True)
     notes_adm.dropna(subset=['TEXT'], inplace=True)
@@ -35,7 +29,8 @@ def get_clean_dataframe():
 
 
 def get_adm_dataframe():
-    """Return pandas dataframe
+    """ :return: pandas dataframe
+
     Read admissions table
     """
     adm = pd.read_csv(filedir_adm)
@@ -45,41 +40,29 @@ def get_adm_dataframe():
 
 
 def get_notes_dataframe():
-    """Return pandas dataframe
+    """ :return: pandas dataframe
+
     Read noteevents table, select discharge summaries. Join then if multiple exist
     """
     notes = pd.read_csv(filedir_notes)
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
+
     # join the discharge summaries where multiple exist
-
-    duplicated = notes_dis_sum[notes_dis_sum.duplicated(subset=['HADM_ID'], keep=False)]
-    duplicated = (duplicated.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
-    print('duplicated length: ', len(duplicated))
-    duplicated.to_csv('DUPLICATED.csv')
-
-    print("Duplicate Rows except first occurrence based on all columns are :")
-    print(duplicated)
-
-    # join discharge summaries
     notes_dis_sum = (notes_dis_sum.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
 
+    # check there is only one discharge summary per person
     assert notes_dis_sum.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
     return notes_dis_sum
 
 
-'''
-# Select duplicate rows except first occurrence based on all columns
-duplicated = notes_dis_sum[notes_dis_sum.duplicated(subset=['HADM_ID'], keep=False)]
-duplicated.to_csv('DUPLICATED.csv')
-
-print("Duplicate Rows except first occurrence based on all columns are :")
-print(duplicated)
-'''
-
-
 def get_merged_dataframe(notes, adm):
+    """ :param notes: notes table stored in pandas dataframe
+        :param adm: admissions table stored in pandas dataframe
+        :return: merged pandas dataframe
 
+    Only keep HADM_ID, DIAGNOSIS, TEXT columns, use left merge
+    """
     notes_adm = pd.merge(adm[['HADM_ID','DIAGNOSIS']],
                             notes[['HADM_ID','TEXT']],
                             on=['HADM_ID'],
@@ -87,69 +70,35 @@ def get_merged_dataframe(notes, adm):
     return notes_adm
 
 
-def get_correctly_spelled_dataframe(notes_adm):
-    '''return datagrame with DIAGNOSIS column correctly spelled'''
-
-   # notes_adm['DIAGNOSIS'] = notes_adm['DIAGNOSIS'].str.replace(';', ' ')
-
-    dictionary = notes_adm.DIAGNOSIS.str.cat(sep=' ')
-    dictionary = dictionary.replace(';', ' ')
-    print(dictionary)
-    # form string of all diagnoses. Use it as our dictionary
-    # print(notes_adm.DIAGNOSIS.str.cat(sep=' '))
-
-    spell = SpellChecker()
-    spell.word_frequency.load_text(dictionary, tokenizer=None)
-    print('goes')
-    print(type(dictionary))
-
-    for i, row in notes_adm.iterrows():
-        print('i: ', i)
-        text = str(row.DIAGNOSIS)
-
-        if text != 'nan':
-            # print('text before: ', text)
-            text = get_correctly_spelled(text, spell)
-
-    return notes_adm
-
-
 def get_dataframe_with_outputs(notes_adm):
-    '''TODO: can be improved by adding more keywords meaning lung cancer.'''
-    notes_adm['OUTPUT'] = (notes_adm.DIAGNOSIS.str.contains('LUNG CA') |
-                                (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
-                                notes_adm.DIAGNOSIS.str.contains('TUMOR', na=False)) |
-                                (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
-                                notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
-                                notes_adm.DIAGNOSIS.str.contains('MESOTHELIOMA') |
-                                notes_adm.DIAGNOSIS.str.contains('LUNG NEOPLASM') |
-                                notes_adm.DIAGNOSIS.str.contains('MALIGNANT PLEURAL EFFUSION') |
-                                (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
-                                notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
-                                (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
-                                notes_adm.DIAGNOSIS.str.contains('CARCINOMA', na=False)) |
-                                notes_adm.DIAGNOSIS.str.contains('SMALL CELL LUNG CA', na=False) |
-                                notes_adm.DIAGNOSIS.str.contains('LOBE CA', na=False)
+    """ :param notes_adm: merged pandas dataframe with HADM_ID, DIAGNOSIS, TEXT columns
+        :return: pandas dataframe with OUTPUT column and values
 
-                                ).astype('int')
+    Lung Cancer patients are given value 1, OUTPUT has value 0 otherwise
+    """
+    notes_adm['OUTPUT'] = (notes_adm.DIAGNOSIS.str.contains('(LUNG CA)|MESOTHELIOMA|(LUNG NEOPLASM)|\
+                           (SMALL CELL LUNG CA)|(LOBE CA)|(MALIGNANT PLEURAL EFFUSION)', na=False) |
+                           (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
+                           notes_adm.DIAGNOSIS.str.contains('TUMOR', na=False)) |
+                           (notes_adm.DIAGNOSIS.str.contains('LUNG', na=False) &
+                            notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
+                           (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
+                            notes_adm.DIAGNOSIS.str.contains('CANCER', na=False)) |
+                           (notes_adm.DIAGNOSIS.str.contains('SMALL CELL', na=False) &
+                            notes_adm.DIAGNOSIS.str.contains('CARCINOMA', na=False))
+                           ).astype('int')
+
     return notes_adm
 
 
-'''
-   notes_adm.DIAGNOSIS.str.contains('MESOTHELIOMA') |
-                                notes_adm.DIAGNOSIS.str.contains('LUNG NEOPLASM') |
-                                notes_adm.DIAGNOSIS.str.contains('MALIGNANT PLEURAL EFFUSION') |
-                                notes_adm.DIAGNOSIS.str.contains('SMALL CELL CANCER')
-'''
+def get_dataframe_no_newborn(notes_adm):
+    """ :param notes_adm: merged pandas dataframe with HADM_ID, DIAGNOSIS, TEXT, OUTPUT columns
+    :return: pandas dataframe
 
-
-def get_dataframe_no_newborn(notes_adm, adm):
-    # remove newborn
+    Patients with NEWBORN Diagnosis are removed
+    """
     notes_adm_final = notes_adm[notes_adm.DIAGNOSIS.str.contains('NEWBORN')==False]
-    print(notes_adm_final)
-    print(notes_adm_final.groupby('OUTPUT').count())
-    # check number of rows is the same. Can delete later
-    assert len(adm) == len(notes_adm), 'Number of rows is higher'
+
     return notes_adm_final
 
 
