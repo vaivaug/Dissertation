@@ -11,13 +11,17 @@ def get_train_test_datasets(notes_adm):
     """
     notes_adm = notes_adm.reset_index(drop=True)
 
-    # Keep 20% of the data as test data
-    test = notes_adm.sample(frac=0.2, random_state=0)
-    print('length of test data: ', len(test))
+    # Keep 30% of the data to form test and validation sets
+    test_validation = notes_adm.sample(frac=0.3, random_state=0)
+    print('length of test and validation data together: ', len(test_validation))
 
-    # The other 80% of data is used for training
-    train = notes_adm.drop(test.index)
+    # test_validation data is split into half for test and validation sets
+    test = test_validation.sample(frac=0.5, random_state=0)
+    validation = test_validation.drop(test.index)
+
+    # The other 70% of data is used for training
+    train = notes_adm.drop(test_validation.index)
     print('length of training data: ', len(train))
 
-    return train, test
+    return train, test, validation
 

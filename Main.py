@@ -4,11 +4,10 @@ from train_test_data import get_train_test_datasets
 from sub_sampling_negatives import get_sub_sampling_negatives_data
 import nltk
 nltk.download('punkt')
-from CountVectorizer_LogisticRegression import get_test_predicted_OUTPUT, plot_AUC, plot_word_importance
+from CountVectorizer_LogisticRegression import get_test_predicted_OUTPUT, plot_word_importance
+from auc import plot_AUC
 from confusion_matrix import *
-from sick_ones_to_file import write_sick_ones_to_file
 from over_sampling_positives import get_over_sampling_positives_data
-from age import get_data_with_age_column
 
 
 '''
@@ -25,7 +24,51 @@ For AUC diagram, add diagram AUC = , Confidence intervals
 8. check if corrections are fair
 '''
 
+# read and clean input data
 notes_adm = get_clean_dataframe()
+
+
+# all data split into train, test and validation sets
+# treat validation set as test set for now
+# do not touch test set till the end now
+train, test, validation = get_train_test_datasets(notes_adm)
+
+# values of parameters to be pressed in UI
+threshold = 0.5
+smote_selected = False
+sub_sample_negatives_selected = True
+over_sample_positives_selected = False
+ngram_min = 1
+ngram_max = 1
+
+# balance train dataset
+if sub_sample_negatives_selected:
+    train = get_sub_sampling_negatives_data(train)
+elif over_sample_positives_selected:
+    train = get_over_sampling_positives_data(train)
+
+print('value counts: ', train.OUTPUT.value_counts())
+
+test_OUTPUT, predicted_OUTPUT, model, prediction_probs = get_test_predicted_OUTPUT(train,
+                                                                                   validation,
+                                                                                   threshold=threshold,
+                                                                                   smote=smote_selected,
+                                                                                   ngram_min=ngram_min,
+                                                                                   ngram_max=ngram_max)
+
+plot_word_importance()
+
+# confusion matrix
+cnf_matrix = get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
+
+plot_confusion_matrix(cnf_matrix)
+print("Accuracy:", metrics.accuracy_score(test_OUTPUT, predicted_OUTPUT))
+print("Precision:", metrics.precision_score(test_OUTPUT, predicted_OUTPUT))
+print("Recall:", metrics.recall_score(test_OUTPUT, predicted_OUTPUT))
+
+plot_AUC(test_OUTPUT, prediction_probs)
+
+
 '''
 # print TEXT of specific patient given HADM_ID
 for index, row in notes_adm.iterrows():
@@ -35,51 +78,5 @@ for index, row in notes_adm.iterrows():
         break
 '''
 
-
-# notes_adm['DIAGNOSIS'] = notes_adm['DIAGNOSIS'].str.replace(';', ' ')
-# print(notes_adm.DIAGNOSIS.str.cat(sep=' '))
-
-
-# notes_adm = get_data_with_age_column(notes_adm)
-# print(notes_adm.AGE.value_counts().to_csv('counts.csv'))
-# print('no age: ', notes_adm.AGE.isna().sum())
-
-#print('length before dropping empty ages: ', len(notes_adm))
-# drop rows where age value is nan
-#notes_adm = notes_adm[notes_adm.AGE.notnull()]
-#print('length after dropping empty ages: ', len(notes_adm))
-
-print('number of cancer sick people: ', notes_adm.OUTPUT.value_counts())
-write_sick_ones_to_file('../sick_ones.csv', notes_adm)
-
-print(len(notes_adm))
-
-# values of parameters to be pressed in UI
-threshold = 0.4
-smote_selected = False
-sub_sample_negatives_selected = True
-over_sample_positives_selected = False
-
-# all data split into train and test
-train, test = get_train_test_datasets(notes_adm)
-
-if sub_sample_negatives_selected:
-    train = get_sub_sampling_negatives_data(train)
-elif over_sample_positives_selected:
-    train = get_over_sampling_positives_data(train)
-
-test_OUTPUT, predicted_OUTPUT = get_test_predicted_OUTPUT(train, test, threshold=threshold, smote=smote_selected)
-
-plot_word_importance()
-# confusion matrix
-cnf_matrix = get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
-plot_confusion_matrix(cnf_matrix)
-
-print("Accuracy:", metrics.accuracy_score(test_OUTPUT, predicted_OUTPUT))
-print("Precision:", metrics.precision_score(test_OUTPUT, predicted_OUTPUT))
-print("Recall:", metrics.recall_score(test_OUTPUT, predicted_OUTPUT))
-
-plot_AUC(test_OUTPUT)
-
-
-
+# print('number of cancer sick people: \n', notes_adm.OUTPUT.value_counts())
+# print(notes_adm.loc[notes_adm['HADM_ID']==169684].to_string())

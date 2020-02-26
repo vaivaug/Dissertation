@@ -19,11 +19,7 @@ def get_clean_dataframe():
     notes_adm = get_merged_dataframe(notes, adm)
     notes_adm = get_dataframe_with_outputs(notes_adm)
     notes_adm = get_dataframe_no_newborn(notes_adm)
-
-    # clean the TEXT column, drop rows with empty discharge summaries
-    notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
-    notes_adm['TEXT'].replace(' ', np.nan, inplace=True)
-    notes_adm.dropna(subset=['TEXT'], inplace=True)
+    notes_adm = get_clean_TEXT_column(notes_adm)
 
     return notes_adm
 
@@ -44,7 +40,7 @@ def get_notes_dataframe():
 
     Read noteevents table, select discharge summaries. Join then if multiple exist
     """
-    notes = pd.read_csv(filedir_notes)
+    notes = pd.read_csv(filedir_notes) # nrows=2000
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
 
@@ -100,6 +96,24 @@ def get_dataframe_no_newborn(notes_adm):
     notes_adm_final = notes_adm[notes_adm.DIAGNOSIS.str.contains('NEWBORN')==False]
 
     return notes_adm_final
+
+
+def get_clean_TEXT_column(notes_adm):
+    """ :param notes_adm: pandas dataframe with HADM_ID, DIAGNOSIS, TEXT, OUTPUT columns
+        :return: pandas dataframe with cleaned TEXT column
+
+    Clean TEXT column values
+    """
+
+    notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
+    notes_adm.TEXT = notes_adm.TEXT.str.replace('\r', ' ')
+    notes_adm['TEXT'].replace(' ', np.nan, inplace=True)
+
+    # drop rows with empty discharge summaries
+    notes_adm.dropna(subset=['TEXT'], inplace=True)
+
+    return notes_adm
+
 
 
 

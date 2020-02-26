@@ -2,7 +2,6 @@
 Contains a function to form balanced training set by sub-sampling negatives
 """
 import pandas as pd
-from sklearn.utils import resample
 
 
 def get_sub_sampling_negatives_data(train):
@@ -17,7 +16,7 @@ def get_sub_sampling_negatives_data(train):
     negative = train[train.OUTPUT == 0]
 
     # change negatives to a downsampled set of negatives
-    negative = negative.sample(n=len(positive))
+    negative = negative.sample(n=len(positive), replace=False)
 
     # combine positives and negatives
     train = pd.concat([positive, negative])

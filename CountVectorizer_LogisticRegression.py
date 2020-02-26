@@ -1,151 +1,66 @@
 from sklearn.feature_extraction.text import CountVectorizer
-from process_text import *
 from sklearn.linear_model import LogisticRegression
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as word_plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import roc_auc_score
 import numpy as np
 from imblearn.over_sampling import SMOTE
+from scipy import sparse
+from sklearn import metrics
+from nltk import word_tokenize
+import string
 import pandas as pd
 import collections
 
-global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT, list_words
+global model, vectorizer
 
 
-def get_test_predicted_OUTPUT(train, test, threshold, smote):
+def get_test_predicted_OUTPUT(train, test, threshold, smote, ngram_min, ngram_max):
 
-    global train_TEXT, test_TEXT, train_OUTPUT, test_OUTPUT, model, predicted_OUTPUT, list_words
+    global model
 
-    # remove new line characters and nulls
-    train = get_clean_text(train)
-    test = get_clean_text(test)
-    print('lengths:')
-    print(len(train))
-    print(len(test))
-    '''
-    import scipy.sparse as sp
+    # return term-document matrix. Treat text as matrices
+    train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
 
-    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
-    subject_vectors = vectorizer.fit_transform(train.TEXT.values)
+    # logistic regression
+    model = LogisticRegression(C=0.0001, penalty='l2')
 
-   # body_vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 1))
-    #body_vectors = body_vectorizer.fit_transform(train.AGE)
+    # fit the model with training data. return fitted estimator
+    model.fit(train_TEXT, train.OUTPUT)
 
-    train_TEXT = sp.hstack([subject_vectors,
-                            train['AGE']])
+    # get positive prediction probabilities
+    prediction_probs = model.predict_proba(test_TEXT)[:, 1]
 
-    test_TEXT = vectorizer.transform(test.TEXT.values)
-    '''
+    # classify samples into two classes depending on the probabilities
+    predicted_OUTPUT = np.where(prediction_probs > threshold, 1, 0)
 
-    # vectorizer creation
-    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(), ngram_range=(1, 4))
+    return test.OUTPUT, predicted_OUTPUT, model, prediction_probs
+
+
+def get_vectorized_train_test(train, test, ngram_min, ngram_max):
+    """
+
+    :param train:
+    :param test:
+    :param ngram_min:
+    :param ngram_max:
+    :return:
+    """
+
+    global vectorizer
+
+    vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(),
+                                 ngram_range=(ngram_min, ngram_max))
 
     print("this can take longer")
     # learn the vocabulary dictionary
     vectorizer.fit_transform(train.TEXT.values)
 
-    # return term-document matrix
+    # create term-document matrices
     train_TEXT = vectorizer.fit_transform(train.TEXT.values)
-    
     test_TEXT = vectorizer.transform(test.TEXT.values)
 
-    train_OUTPUT = train.OUTPUT
-    test_OUTPUT = test.OUTPUT
-
-    if smote:
-        sm = SMOTE()
-        train_TEXT, train_OUTPUT = sm.fit_sample(train_TEXT, train_OUTPUT)
-
-        print(train_OUTPUT.value_counts())
-
-    # logistic regression
-    model = LogisticRegression(C=0.0001, penalty='l2')
-    model.fit(train_TEXT, train_OUTPUT)
-
-    list_words = vectorizer.get_feature_names()
-
-    predicted_OUTPUT = np.where(model.predict_proba(test_TEXT)[:, 1] > threshold, 1, 0)
-
-
-    print('******************text*****************')
-    print(test)
-    test.TEXT.to_csv('../TEST_TEXT.csv')
-
-    print('******************TRUE OUTPUT*****************')
-    test.OUTPUT.to_csv('../TEST_REAL_OUTPUT.csv')
-
-    print(test.OUTPUT.iloc[[2]])
-    print('******************PREDICTED OUTOUT*********************')
-    print('predicted output: ', predicted_OUTPUT)
-    print(type(predicted_OUTPUT))
-    np.savetxt("../test_predicted_output.csv", predicted_OUTPUT, delimiter=",")
-
-    get_sick_predicted_not_sick(test, predicted_OUTPUT)
-
-    return test_OUTPUT, predicted_OUTPUT
-
-
-
-def get_sick_predicted_not_sick(test, predicted_OUTPUT):
-    sick_predicted_not_sick = 0
-    sick_predicted_sick = 0
-    not_sick_predicted_not_sick = 0
-    not_sick_predicted_sick = 0
-    print('length of test: ', len(test.index))
-    print('length of predicted output: ', len(predicted_OUTPUT))
-    row_number = 0
-    for index, row in test.iterrows():
-        if row['OUTPUT'] == 1 and predicted_OUTPUT[row_number] == 0:
-            sick_predicted_not_sick+=1
-            print('missed: ')
-            print(row)
-            print(row['HADM_ID'])
-            print(row['TEXT'])
-        elif row['OUTPUT'] == 1 and predicted_OUTPUT[row_number] == 1:
-            sick_predicted_sick +=1
-        elif row['OUTPUT'] == 0 and predicted_OUTPUT[row_number] == 0:
-            not_sick_predicted_not_sick += 1
-        elif row['OUTPUT'] == 0 and predicted_OUTPUT[row_number] == 1:
-            not_sick_predicted_sick += 1
-        row_number += 1
-
-    print('sick_predicted_not_sick: ', sick_predicted_not_sick)
-    print("sick_predicted_sick: ", sick_predicted_sick)
-    print('not_sick_predicted_not_sick: ', not_sick_predicted_not_sick)
-    print('not_sick_predicted_sick: ', not_sick_predicted_sick)
-    print('sum: ', not_sick_predicted_sick+not_sick_predicted_not_sick+sick_predicted_sick+sick_predicted_not_sick)
-
-def plot_AUC(test_OUTPUT):
-    # no skill prediction
-    ns_probs = [0 for _ in range(len(test_OUTPUT))]
-
-    # keep probabilities for the positive outcome only
-    lr_probs = model.predict_proba(test_TEXT)[:, 1]
-
-    # calculate scores
-    ns_auc = roc_auc_score(test_OUTPUT, ns_probs)
-    lr_auc = roc_auc_score(test_OUTPUT, lr_probs)
-
-    # summarize scores
-    print('No Skill: ROC AUC=%.3f' % (ns_auc))
-    print('Logistic: ROC AUC=%.3f' % (lr_auc))
-
-    # calculate roc curves
-    ns_fpr, ns_tpr, thresholds1 = roc_curve(test_OUTPUT, ns_probs)
-    lr_fpr, lr_tpr, thresholds2 = roc_curve(test_OUTPUT, lr_probs)
-    train_fpr, train_tpr, threshold3 = roc_curve(train_OUTPUT, model.predict_proba(train_TEXT)[:, 1])
-
-    # plot the roc curve for the model
-    plt.plot(ns_fpr, ns_tpr, linestyle='--', label='No skills')
-    plt.plot(lr_fpr, lr_tpr, marker='.', label='Logistic')
-
-    # axis labels
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    # show the legend
-    plt.legend()
-    # show the plot
-    plt.show()
+    return train_TEXT, test_TEXT
 
 
 def plot_word_importance():
@@ -177,6 +92,8 @@ def get_sorted_word_importance_dict():
     print('WEIGHTS:')
     print(abs_weights)
 
+    list_words = vectorizer.get_feature_names()
+
     # join words with weight values
     joined_word_weight = dict(zip(list_words, weights[0]))
 
@@ -187,8 +104,8 @@ def get_sorted_word_importance_dict():
 
 
 def plot_one_side_importance(importance_dict):
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
+    word_plt.rcdefaults()
+    fig, ax = word_plt.subplots()
 
     ax.barh(range(len(importance_dict)), list(importance_dict.values()), align='center')
     ax.set_yticks(range(len(importance_dict)))
@@ -196,5 +113,39 @@ def plot_one_side_importance(importance_dict):
     ax.invert_yaxis()
     ax.set_xlabel('words')
     ax.set_title('Importance of words')
-    plt.show()
-    ax.invert_yaxis()
+    word_plt.show()
+    # ax.invert_yaxis()
+    word_plt.savefig('plots/word_importance_plt.png')
+    word_plt.clf()
+
+
+def get_tokenizer(text):
+    t = str.maketrans(dict.fromkeys(string.punctuation + '0123456789', " "))
+    text = text.lower().translate(t)
+    tokens = word_tokenize(text)
+    return tokens
+
+
+def get_stop_words():
+    my_stop_words = ['the', 'and', 'to', 'of', 'was', 'with', 'a', 'on', 'in', 'for', 'name',
+                    'is', 'patient', 's', 'he', 'at', 'as', 'or', 'one', 'she', 'his', 'her', 'am',
+                         'were', 'you', 'pt', 'pm', 'by', 'be', 'had', 'your', 'this', 'date',
+                         'from', 'there', 'an', 'that', 'p', 'are', 'have', 'has', 'h', 'but', 'o',
+                         'namepattern', 'which', 'every', 'also', 'should', 'if', 'it', 'been',
+                         'who', 'during', 'any', 'c', 'd', 'x', 'i', 'all', 'please']
+    return my_stop_words
+
+'''
+    if smote:
+        print('goes')
+        sm = SMOTE()
+        train_TEXT, train_OUTPUT = sm.fit_sample(train_TEXT, train.OUTPUT)
+       # train_TEXT = pd.DataFrame(train_TEXT.todense())
+        print(type(train_TEXT))
+       # train_TEXT.to_csv('smote_examples.csv')
+        print(train_TEXT)
+        print('smote value counts: ', train_OUTPUT.value_counts())
+
+        # return term-document matrix. Treat text as matrices
+        train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
+'''
