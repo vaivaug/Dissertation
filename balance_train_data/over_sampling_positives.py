@@ -2,7 +2,6 @@
 Contains a function to form balanced training set by over-sampling positives
 """
 import pandas as pd
-from sklearn.utils import resample
 
 
 def get_over_sampling_positives_data(train):

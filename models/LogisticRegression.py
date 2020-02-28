@@ -1,3 +1,7 @@
+"""
+Create a Logistic Regression model and make predictions on test data.
+Plot word importance for this model
+"""
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as word_plt
 import numpy as np
@@ -7,7 +11,15 @@ global model
 
 
 def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, threshold):
+    """ :param train_TEXT: TEXT column of train dataframe
+        :param train_OUTPUT: OUTPUT column of train dataframe
+        :param test_TEXT: TEXT column of test dataframe
+        :param test_OUTPUT: OUTPUT column of test dataframe
+        :param threshold: threshold value
 
+    Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
+    Classify patients to positives and negatives depending on the threshold
+    """
     global model
 
     # logistic regression
@@ -26,6 +38,9 @@ def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, 
 
 
 def plot_word_importance():
+    """
+    Plot the importance of words when making a positive prediction and negative prediction
+    """
 
     sorted_word_weight = get_sorted_word_importance_dict()
 
@@ -47,7 +62,10 @@ def plot_word_importance():
 
 
 def get_sorted_word_importance_dict():
+    """ :return: a dictionary of word-value pairs. Values are associated with an importance
+        of the words given the model
 
+    """
     # weights associated to words in list_words
     weights = model.coef_
     abs_weights = np.abs(weights)
