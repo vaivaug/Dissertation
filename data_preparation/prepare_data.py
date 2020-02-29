@@ -40,7 +40,7 @@ def get_notes_dataframe():
 
     Read noteevents table, select discharge summaries. Join then if multiple exist
     """
-    notes = pd.read_csv(filedir_notes, nrows=2000) # nrows=2000
+    notes = pd.read_csv(filedir_notes, nrows=1000) # nrows=2000
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
 

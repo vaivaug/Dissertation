@@ -6,6 +6,8 @@ from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as word_plt
 import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
+from sklearn.model_selection import cross_val_score
+from sklearn import metrics
 
 global model
 
@@ -62,8 +64,8 @@ def plot_word_importance():
 
 
 def get_sorted_word_importance_dict():
-    """ :return: a dictionary of word-value pairs. Values are associated with an importance
-        of the words given the model
+    """ :return: a dictionary of word-value pairs. Values are associated with the importance
+        of the words given the model. Dictionary is sorted by value in an increasing order
 
     """
     # weights associated to words in list_words
