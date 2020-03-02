@@ -2,28 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Diss_Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Diss_Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Dissertation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Dissertation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogisticRegression.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/age.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/confusion_matrix.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/counts.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_preparation/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_preparation/prepare_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/auc.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/auc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/confusion_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/confusion_matrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LogisticRegression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/over_sampling_positives.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prepare_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sick_ones_to_file.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spell_checker.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_sampling_negatives.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_test_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vectorize_text.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/conf_matrix_plt.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +35,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -153,10 +138,10 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="728" y="302" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1579636370319" />
-    <state x="321" y="342" width="424" height="491" key="FileChooserDialogImpl" timestamp="1582731582739">
+    <state x="321" y="342" width="424" height="491" key="FileChooserDialogImpl" timestamp="1583066817779">
       <screen x="0" y="27" width="1920" height="1020" />
     </state>
-    <state x="321" y="342" width="424" height="491" key="FileChooserDialogImpl/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1582731582739" />
+    <state x="321" y="342" width="424" height="491" key="FileChooserDialogImpl/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1583066817779" />
     <state x="321" y="342" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1020@0.27.1920.1020" timestamp="1582200286824" />
     <state x="2241" y="333" width="424" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1020@1920.0.1920.1080" timestamp="1581342161078" />
     <state width="1377" height="258" key="GridCell.Tab.0.bottom" timestamp="1582048739233">
@@ -190,10 +175,10 @@
     <state x="699" y="189" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1020@0.27.1920.1020" timestamp="1582896615664" />
     <state x="1969" y="189" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1020@1920.0.1920.1080" timestamp="1581342241390" />
     <state x="106" y="223" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1579802830090" />
-    <state x="728" y="393" key="com.intellij.ide.util.TipDialog" timestamp="1582987530701">
+    <state x="728" y="393" key="com.intellij.ide.util.TipDialog" timestamp="1583064936152">
       <screen x="0" y="27" width="1920" height="1020" />
     </state>
-    <state x="728" y="393" key="com.intellij.ide.util.TipDialog/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1582987530701" />
+    <state x="728" y="393" key="com.intellij.ide.util.TipDialog/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1583064936152" />
     <state x="728" y="393" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.27.1920.1020@0.27.1920.1020" timestamp="1582895571137" />
     <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1581259081503" />
   </component>

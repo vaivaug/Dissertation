@@ -96,6 +96,7 @@ def plot_one_side_importance(importance_dict):
     ax.set_xlabel('words')
     ax.set_title('Importance of words')
     word_plt.show()
+
     # ax.invert_yaxis()
    # word_plt.savefig('plots/word_importance_plt.png')
   #  word_plt.clf()
