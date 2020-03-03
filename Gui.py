@@ -2,67 +2,92 @@ from tkinter import *
 
 from tkinter.ttk import *
 
-global threshold, balancing_type, model, ngram_start, ngram_end
+global threshold, balancing_type, solver, ngram_start, ngram_end
+from end_to_end import run_end_to_end
 
-from Main import run_main
-
+global threshold, data_balancing_type, solver, ngram_start, ngram_end
 
 def run_gui():
 
-    global threshold, balancing_type, model, ngram_start, ngram_end
-
     window = Tk()
-    window.title("Set up program parameters")
+    window.title("Program Parameters and Model Results")
     window.configure(background='peach puff')
     window.geometry('800x600')
 
+    create_threshold_param(window)
+    create_data_balance_param(window)
+    create_solver_selection(window)
+    create_ngram_selection(window)
 
+    #def clicked():
+
+       # run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
+       #                int(ngram_min.get()), int(ngram_max.get()))
+
+    run_button = Button(window, text="Run Model", command=clicked)
+    run_button.grid(column=1, row=6, padx=10, pady=10)
+
+    window.mainloop()
+
+
+def clicked():
+
+    run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
+                       int(ngram_min.get()), int(ngram_max.get()))
+
+
+def create_threshold_param(window):
+
+    global threshold
     # threshold label
     threshold_label = Label(window, text="  Threshold:")
     threshold_label.config(font=("Courier bold", 12), background='peach puff')
     threshold_label.grid(column=0, row=0, sticky=W, padx=10, pady=10)
 
     # enter threshold window
-    threshold_value = Entry(window, width=12)
-    threshold_value.grid(column=1, row=0, sticky=W, padx=10, pady=10)
+    threshold = Entry(window, width=12)
+    threshold.grid(column=1, row=0, sticky=W, padx=10, pady=10)
 
+
+def create_data_balance_param(window):
+
+    global data_balancing_type
 
     # label
     data_balancing_label = Label(window, text="  Train data balancing type: ")
     data_balancing_label.config(font=("Courier bold", 12), background='peach puff')
     data_balancing_label.grid(column=0, row=2, sticky=W, padx=10, pady=10)
+
+    # drop down selection
     data_balancing_type = Combobox(window, state='readonly')
-    data_balancing_type['values']= ("SMOTE", "sub-sample negatives", "over-sample positives")
+    data_balancing_type['values'] = ("SMOTE", "sub-sample negatives", "over-sample positives")
     data_balancing_type.config(font=("Courier bold", 10))
+    # default value selected
     data_balancing_type.current(0)
     data_balancing_type.grid(column=1, row=2, padx=10, pady=10)
 
+
+def create_solver_selection(window):
+
+    global solver
+
     # label
-    model_label = Label(window, text="  Model: ")
-    model_label.config(font=("Courier bold", 12), background='peach puff')
-    model_label.grid(column=0, row=4, sticky=W, padx=10, pady=10)
+    solver_label = Label(window, text="  Linear Regression Solver: ")
+    solver_label.config(font=("Courier bold", 12), background='peach puff')
+    solver_label.grid(column=0, row=4, sticky=W, padx=10, pady=10)
 
-    model_type = Combobox(window, state='readonly')
-    model_type['values']= ("Logistic Regression", "SVM")
-    model_type.config(font=("Courier bold", 10))
-    model_type.current(0)
-
-    model_type.grid(column=1, row=4, padx=10, pady=10)
-
-
-    def clicked():
-
-        threshold = float(threshold_value.get())
-        balancing_type = data_balancing_type.get()
-        model = model_type.get()
-        ngram_start = int(ngram_min.get())
-        ngram_end = int(ngram_max.get())
-        print(model, '   ', balancing_type, '  ', threshold, '  ', ngram_start, '  ', ngram_end)
-
-        run_main(threshold, balancing_type, model, ngram_start, ngram_end)
+    # drop down selection
+    solver = Combobox(window, state='readonly')
+    solver['values'] = ("newton-cg", "lbfgs", "liblinear", "sag", "saga")
+    solver.config(font=("Courier bold", 10))
+    solver.current(0)
+    solver.grid(column=1, row=4, padx=10, pady=10)
 
 
-    # ngram
+def create_ngram_selection(window):
+
+    global ngram_min, ngram_max
+
     # ngram label
     ngram_label = Label(window, text="  Ngram:")
     ngram_label.config(font=("Courier bold", 12), background='peach puff')
@@ -75,10 +100,3 @@ def run_gui():
     # enter ngram window
     ngram_max = Entry(window, width=12)
     ngram_max.grid(column=2, row=5, sticky=W, padx=10, pady=10)
-
-    run_button = Button(window, text="Run Model", command=clicked)
-    run_button.grid(column=1, row=6, padx=10, pady=10)
-
-    window.mainloop()
-
-run_gui()

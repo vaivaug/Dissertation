@@ -12,7 +12,7 @@ from sklearn import metrics
 global model
 
 
-def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, threshold):
+def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, threshold, solver):
     """ :param train_TEXT: TEXT column of train dataframe
         :param train_OUTPUT: OUTPUT column of train dataframe
         :param test_TEXT: TEXT column of test dataframe
@@ -25,7 +25,7 @@ def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, 
     global model
 
     # logistic regression
-    model = LogisticRegression(C=0.0001, penalty='l2')
+    model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
 
     # fit the model with training data. return fitted estimator
     model.fit(train_TEXT, train_OUTPUT)
@@ -36,7 +36,7 @@ def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, 
     # classify samples into two classes depending on the probabilities
     predicted_OUTPUT = np.where(prediction_probs > threshold, 1, 0)
 
-    return test_OUTPUT, predicted_OUTPUT, model, prediction_probs
+    return test_OUTPUT, predicted_OUTPUT, prediction_probs
 
 
 def plot_word_importance():
@@ -59,8 +59,8 @@ def plot_word_importance():
 
     print(positive_importance)
 
-    plot_one_side_importance(positive_importance)
-    plot_one_side_importance(negative_importance)
+    plot_one_side_importance(positive_importance, "plots/positive.png")
+    plot_one_side_importance(negative_importance, "plots/negative.png")
 
 
 def get_sorted_word_importance_dict():
@@ -85,7 +85,7 @@ def get_sorted_word_importance_dict():
     return sorted_word_weight
 
 
-def plot_one_side_importance(importance_dict):
+def plot_one_side_importance(importance_dict, image_filedir):
     word_plt.rcdefaults()
     fig, ax = word_plt.subplots()
 
@@ -95,9 +95,12 @@ def plot_one_side_importance(importance_dict):
     ax.invert_yaxis()
     ax.set_xlabel('words')
     ax.set_title('Importance of words')
-    word_plt.show()
+    word_importance_fig = word_plt.gcf()
+    # word_plt.show()
+    word_plt.draw()
+    word_importance_fig.savefig(image_filedir)
+   # word_plt.clf()
 
     # ax.invert_yaxis()
-   # word_plt.savefig('plots/word_importance_plt.png')
   #  word_plt.clf()
 

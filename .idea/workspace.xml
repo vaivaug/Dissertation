@@ -2,13 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/end_to_end.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_preparation/prepare_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_preparation/prepare_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_preparation/train_test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_preparation/train_test_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/auc.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/auc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/confusion_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/confusion_matrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LogisticRegression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/conf_matrix_plt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/auc_plt.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/auc_plt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/conf_matrix_plt.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/conf_matrix_plt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/word_importance_plt.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,10 +180,10 @@
     <state x="699" y="189" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1020@0.27.1920.1020" timestamp="1582896615664" />
     <state x="1969" y="189" width="1022" height="737" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1020@1920.0.1920.1080" timestamp="1581342241390" />
     <state x="106" y="223" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1579802830090" />
-    <state x="728" y="393" key="com.intellij.ide.util.TipDialog" timestamp="1583064936152">
+    <state x="728" y="393" key="com.intellij.ide.util.TipDialog" timestamp="1583234956482">
       <screen x="0" y="27" width="1920" height="1020" />
     </state>
-    <state x="728" y="393" key="com.intellij.ide.util.TipDialog/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1583064936152" />
+    <state x="728" y="393" key="com.intellij.ide.util.TipDialog/0.27.1920.1020/1920.0.1920.1080@0.27.1920.1020" timestamp="1583234956482" />
     <state x="728" y="393" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.27.1920.1020@0.27.1920.1020" timestamp="1582895571137" />
     <state x="771" y="405" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1581259081503" />
   </component>

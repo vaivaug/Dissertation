@@ -34,7 +34,7 @@ def plot_AUC(test_OUTPUT, prediction_probs):
     auc_plt.legend()
     # show the plot
     auc_fig = auc_plt.gcf()
-    auc_plt.show()
+    # auc_plt.show()
     auc_plt.draw()
     auc_fig.savefig('plots/auc_plt.png')
     auc_plt.clf()

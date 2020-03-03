@@ -28,7 +28,7 @@ def plot_confusion_matrix(cnf_matrix):
     cnf_plt.ylabel('Actual label')
     cnf_plt.xlabel('Predicted label')
     conf_matrix_fig = cnf_plt.gcf()
-    cnf_plt.show()
+    # cnf_plt.show()
     cnf_plt.draw()
     conf_matrix_fig.savefig('plots/conf_matrix_plt.png')
     cnf_plt.clf()
