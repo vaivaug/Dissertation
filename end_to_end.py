@@ -87,3 +87,7 @@ def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, n
                                                                                 solver=solver)
     return test_OUTPUT, predicted_OUTPUT, prediction_probs
 
+
+def append_results_file(filedir, threshold, solver, ngram_min, ngram_max):
+    with open(filedir, 'a') as fd:
+        fd.write()

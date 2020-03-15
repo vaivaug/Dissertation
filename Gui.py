@@ -4,8 +4,10 @@ from tkinter.ttk import *
 
 global threshold, balancing_type, solver, ngram_start, ngram_end
 from end_to_end import run_end_to_end
+#from PIL import ImageTk, Image
 
 global threshold, data_balancing_type, solver, ngram_start, ngram_end
+
 
 def run_gui():
 
@@ -19,21 +21,32 @@ def run_gui():
     create_solver_selection(window)
     create_ngram_selection(window)
 
-    #def clicked():
-
-       # run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
-       #                int(ngram_min.get()), int(ngram_max.get()))
-
     run_button = Button(window, text="Run Model", command=clicked)
     run_button.grid(column=1, row=6, padx=10, pady=10)
 
     window.mainloop()
 
 
-def clicked():
+def clicked(window):
 
     run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
-                       int(ngram_min.get()), int(ngram_max.get()))
+                   int(ngram_min.get()), int(ngram_max.get()))
+
+    # show_output_images(window)
+
+'''
+def show_output_images(window):
+    path = "plots/conf_matrix.jpg"
+
+    # Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
+    img = ImageTk.PhotoImage(Image.open(path))
+
+    # The Label widget is a standard Tkinter widget used to display a text or image on the screen.
+    panel = tk.Label(window, image=img)
+
+    # The Pack geometry manager packs widgets in rows or columns.
+    panel.pack(side="bottom", fill="both", expand="yes")
+'''
 
 
 def create_threshold_param(window):

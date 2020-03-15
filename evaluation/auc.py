@@ -30,10 +30,13 @@ def plot_AUC(test_OUTPUT, prediction_probs):
     # axis labels
     auc_plt.xlabel('False Positive Rate')
     auc_plt.ylabel('True Positive Rate')
+    auc_plt.title('Area Under the ROC Curve')
     # show the legend
     auc_plt.legend()
+    auc_plt.tight_layout()
     # show the plot
     auc_fig = auc_plt.gcf()
+    auc_fig.tight_layout()
     # auc_plt.show()
     auc_plt.draw()
     auc_fig.savefig('plots/auc_plt.png')
