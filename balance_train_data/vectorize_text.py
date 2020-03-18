@@ -6,13 +6,14 @@ global vectorizer
 
 
 def get_vectorized_train_test(train, test, ngram_min, ngram_max):
-    """
+    """ Create term-document matrices for the TEXT columns in train and test datasets
 
-    :param train:
-    :param test:
-    :param ngram_min:
-    :param ngram_max:
-    :return:
+    @param train: pandas dataframe, stores the data used for training the model
+    @param test: pandas dataframe, stores the data used for testing the model
+    @param ngram_min: integer, minimum number of adjacent words to be used for vectorization
+    @param ngram_max: integer, maximum number of adjacent words to be used for vectorization
+    @return: train_TEXT: vectorized TEXT column for training data
+             test_TEXT: vectorized TEXT column for test data
     """
     global vectorizer
 
@@ -29,23 +30,37 @@ def get_vectorized_train_test(train, test, ngram_min, ngram_max):
 
 
 def get_tokenizer(text):
+    """
+
+    @param text:
+    @return:
+    """
+
     t = str.maketrans(dict.fromkeys(string.punctuation + '0123456789', " "))
     text = text.lower().translate(t)
     tokens = word_tokenize(text)
+    print(tokens)
     return tokens
 
 
 def get_stop_words():
-    my_stop_words = ['the', 'and', 'to', 'of', 'was', 'with', 'a', 'on', 'in', 'for', 'name', 'is',
+    """ Store list of useless words, used for Vectorizing text
+
+    @return: stop_words: list of stop words
+    """
+    stop_words = ['the', 'and', 'to', 'of', 'was', 'with', 'a', 'on', 'in', 'for', 'name', 'is',
                      'patient', 's', 'he', 'at', 'as', 'or', 'one', 'she', 'his', 'her', 'am',
                      'were', 'you', 'pt', 'pm', 'by', 'be', 'had', 'your', 'this', 'date', 'from',
                      'there', 'an', 'that', 'p', 'are', 'have', 'has', 'h', 'but', 'o', 'namepattern',
                      'which', 'every', 'also', 'should', 'if', 'it', 'been', 'b', 'w', 'who', 'during',
                      'any', 'c', 'd', 'x', 'i', 'all', 'please']
-    return my_stop_words
+    return stop_words
 
 
 def get_feature_names():
+    """ use the same vectorizer object to get the feature names. Used when plotting word importance
 
+    @return: a list of feature names
+    """
     global vectorizer
     return vectorizer.get_feature_names()

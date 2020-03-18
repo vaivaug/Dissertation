@@ -5,12 +5,13 @@ import pandas as pd
 
 
 def get_sub_sampling_negatives_data(train):
-    """ :param train: pandas dataset of train data
-        :return: pandas dataset of train data containing all positive samples
-        from initial train data plus the same amount of negative samples
+    """ Downsample majority class i.e. negatives
 
-    Downsample majority class i.e. negatives
+    @param train: pandas dataframe storing the training data
+    @return: train: pandas dataframe storing the training data containing all positive samples
+        from initial train data plus the same amount of negative samples
     """
+
     # create two datasets containing only positive and only negative samples
     positive = train[train.OUTPUT == 1]
     negative = train[train.OUTPUT == 0]

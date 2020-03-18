@@ -103,6 +103,13 @@ def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, n
 
 
 def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs):
+    """ plot positive and negative word importance, plot confusion matrix, area under the ROC curve,
+    print the accuracy, precision and recall scores
+
+    @param test_OUTPUT: list of output values in the test set
+    @param predicted_OUTPUT: list of predicted output values for the test set
+    @param prediction_probs: list of prediction probabilities for the test set, needed to plot the AUC
+    """
 
     # illustrate word importance
     plot_word_importance()

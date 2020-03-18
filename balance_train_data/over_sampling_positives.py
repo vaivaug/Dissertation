@@ -5,12 +5,13 @@ import pandas as pd
 
 
 def get_over_sampling_positives_data(train):
-    """ :param train: pandas dataset of train data
-        :return: pandas dataset of train data containing all negative samples
-        from initial train data plus the same amount of positive samples some of which are repeated multiple times
+    """ Oversample minority class i.e. positives
 
-    Oversample minority class i.e. positives
+    @param train: pandas dataframe storing the data used for training
+    @return: train: pandas dataframe storing the data used for training containing all negative samples
+        from initial train data plus the same amount of positive samples some of which are repeated multiple times
     """
+
     # create two datasets containing only positive and only negative samples
     positive = train[train.OUTPUT == 1]
     negative = train[train.OUTPUT == 0]

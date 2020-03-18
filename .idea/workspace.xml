@@ -2,17 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="310bd0d0-a3e5-4f72-b138-410076a57f62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/experiment_C.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Dissertation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Dissertation.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/balance_train_data/over_sampling_positives.py" beforeDir="false" afterPath="$PROJECT_DIR$/balance_train_data/over_sampling_positives.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/balance_train_data/smote_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/balance_train_data/smote_sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/balance_train_data/sub_sampling_negatives.py" beforeDir="false" afterPath="$PROJECT_DIR$/balance_train_data/sub_sampling_negatives.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/balance_train_data/vectorize_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/balance_train_data/vectorize_text.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/end_to_end.py" beforeDir="false" afterPath="$PROJECT_DIR$/end_to_end.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/auc_plt.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/auc_plt.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/conf_matrix_plt.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/conf_matrix_plt.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/negative.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/negative.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/positive.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/positive.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
