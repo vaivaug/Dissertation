@@ -1,7 +1,10 @@
+"""
+Gui window to enter the parameters. Once the 'Run Code' button is clicked, the entered parameters are
+used to run the end to end process: data cleaning, training the model, making predictions
+and plotting the prediction results
+"""
 from tkinter import *
-
 from tkinter.ttk import *
-
 global threshold, balancing_type, solver, ngram_start, ngram_end
 from end_to_end import run_end_to_end
 #from PIL import ImageTk, Image
@@ -27,7 +30,7 @@ def run_gui():
     window.mainloop()
 
 
-def clicked(window):
+def clicked():
 
     run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
                    int(ngram_min.get()), int(ngram_max.get()))

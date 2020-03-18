@@ -10,3 +10,13 @@ In addition to the initial plan, I will create a simple UI to represent the mode
 
 To sum up, the project is going well and my supervisor seems happy with the progress we made. 
 
+Plan:
+cross validation
+check the best C value
+check the best max_features value
+decide on structure of experiments
+run experiments for each type of imbalanced data
+update trello board
+write a report
+
+
