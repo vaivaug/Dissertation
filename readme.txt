@@ -19,4 +19,19 @@ run experiments for each type of imbalanced data
 update trello board
 write a report
 
+Questions:
+1. Run experiments 3*5 = 15 output files (3 different balancing types, 5 different solvers)
+For each out of 15, we run different thresholds and ngrams.
+
+2. thresholds: 0.05, 0.1, 0.15, 0.2 ....,  0.95 ? (every 0.05)
+   ngrams:  (1, 1); (1, 2); (1, 3); (2, 2); (2, 3); (3, 3) ?    Do I need 4?
+
+3. which evaluation parameters to store: AUC, Accuracy, Confusion Matrix?  (one of them or all of them)
+
+4. The best will be the one with the lowest FN, and quiet low top right corner? Keep percentages of both?
+
+4. Using test, validation and train. Not touching test at all. treat validation as test.
+So do the cross validation: on train ; or on train+validation ?
+
+5.
 

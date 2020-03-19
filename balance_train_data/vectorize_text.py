@@ -1,3 +1,6 @@
+"""
+Class used to vectorize text (create term-document matrices)
+"""
 from sklearn.feature_extraction.text import CountVectorizer
 import string
 from nltk import word_tokenize
@@ -30,16 +33,15 @@ def get_vectorized_train_test(train, test, ngram_min, ngram_max):
 
 
 def get_tokenizer(text):
-    """
+    """ Text string split into word strings, clean words (no unnecessary characters, punctuation etc.)
 
-    @param text:
-    @return:
+    @param text: strings in the TEXT columns
+    @return: tokens: words, tokenized text
     """
 
     t = str.maketrans(dict.fromkeys(string.punctuation + '0123456789', " "))
     text = text.lower().translate(t)
     tokens = word_tokenize(text)
-    print(tokens)
     return tokens
 
 
@@ -58,7 +60,7 @@ def get_stop_words():
 
 
 def get_feature_names():
-    """ use the same vectorizer object to get the feature names. Used when plotting word importance
+    """ Use the same vectorizer object to get the feature names. Used when plotting word importance
 
     @return: a list of feature names
     """

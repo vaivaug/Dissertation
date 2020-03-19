@@ -9,7 +9,7 @@ from data_preparation.train_test_data import get_train_test_datasets
 from balance_train_data.sub_sampling_negatives import get_sub_sampling_negatives_data
 import nltk
 nltk.download('punkt')
-from models.LogisticRegression import get_test_predicted_OUTPUT, plot_word_importance
+from models.LogisticRegression import get_predicted_OUTPUT, plot_word_importance
 from evaluation.auc import plot_AUC
 from evaluation.confusion_matrix import *
 from balance_train_data.over_sampling_positives import get_over_sampling_positives_data
@@ -38,7 +38,7 @@ def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
     train, test, validation = get_train_test_datasets(notes_adm)
 
     if results_on_validation:
-        test_OUTPUT, predicted_OUTPUT, prediction_probs = run_model_on_balanced_data(balancing_type,
+        predicted_OUTPUT, prediction_probs = run_model_on_balanced_data(balancing_type,
                                                                                      train,
                                                                                      validation,
                                                                                      threshold,
@@ -46,7 +46,7 @@ def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
                                                                                      ngram_min,
                                                                                      ngram_max)
     else:
-        test_OUTPUT, predicted_OUTPUT, prediction_probs = run_model_on_balanced_data(balancing_type,
+        predicted_OUTPUT, prediction_probs = run_model_on_balanced_data(balancing_type,
                                                                                      train,
                                                                                      test,
                                                                                      threshold,
@@ -54,11 +54,11 @@ def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
                                                                                      ngram_min,
                                                                                      ngram_max)
     # plot confucion_matrix, AUC, print accuracy
-    plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs)
+    plot_evaluation_metrics(test.OUTPUT, predicted_OUTPUT, prediction_probs)
 
 
 def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, ngram_min, ngram_max):
-    """ balance the dataset: SMOTE first vectorizes the dataset and then balances it while the other two types
+    """ Balance the dataset: SMOTE first vectorizes the dataset and then balances it while the other two types
     balance the dataset and then vectorize it.
     Call get_test_predicted_OUTPUT function to train the model and get predictions on the test set
 
@@ -93,17 +93,26 @@ def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, n
         train_OUTPUT = train.OUTPUT
 
     # create model
+    '''
     test_OUTPUT, predicted_OUTPUT, prediction_probs = get_test_predicted_OUTPUT(train_TEXT,
                                                                                 train_OUTPUT,
                                                                                 test_TEXT,
                                                                                 test.OUTPUT,
                                                                                 threshold=threshold,
                                                                                 solver=solver)
-    return test_OUTPUT, predicted_OUTPUT, prediction_probs
+    #print('cross validation results: ')
+    '''
+    predicted_OUTPUT, prediction_probs = get_predicted_OUTPUT(train_TEXT,
+                                                                                train_OUTPUT,
+                                                                                test_TEXT,
+                                                                                threshold=threshold,
+                                                                                solver=solver)
+
+    return predicted_OUTPUT, prediction_probs
 
 
 def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs):
-    """ plot positive and negative word importance, plot confusion matrix, area under the ROC curve,
+    """ Plot positive and negative word importance, plot confusion matrix, area under the ROC curve,
     print the accuracy, precision and recall scores
 
     @param test_OUTPUT: list of output values in the test set

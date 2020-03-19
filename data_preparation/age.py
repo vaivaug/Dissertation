@@ -1,32 +1,47 @@
+"""
+Contains a function which adds an AGE column to all the patients in the dataframe.
+If the age is not extracted, column value is NaN
+"""
 import numpy as np
-import re, datetime
+import re
+import datetime
 from dateutil.relativedelta import relativedelta
 
 
 def get_data_with_age_column(data):
+    """ Create Age column for the given dataset. Age is mentioned in free text, no consistent structure.
+    The following code extracts the age of all the patients apart from around 200. The code is not used in the final
+    program run.
+
+    @param data: pandas dataframe, containing rows of training or testing data sets
+    @return: pandas dataframe, containing rows of training or testing data sets, added AGE column
+    """
 
     # initialise age column with NaN
     data['AGE'] = np.nan
 
+    # iterate through all the patients
     for index, row in data.iterrows():
-        # get age from date of birth
+        # get age from date of birth mentioned in TEXT
         age = get_age_from_date_of_birth(row['TEXT'])
 
         if age is None:
-            # get age from inside of text
+            # get age from the first few sentences in TEXT
             age = get_age_from_text(" ".join(row['TEXT'].split()[:200]), 3)
 
         data.set_value(index, 'AGE', age)
 
     return data
 
-'''
-1. search for Date of Birth, Discharge date minus d of b
-2. else search for 'year' 
-3.  search for age'''
-
 
 def get_age_from_date_of_birth(text):
+    """ Get age by subtracting Date of Birth from the Discharge Date.
+    If the 'Date of Birth' is mentioned, then extract the date from the next following words, find the end date,
+    calculate the age.
+
+    @param text: discharge summary string
+    @return: integer number for age or None
+    """
 
     word = r"\W*([\w]+)"
     date_of_birth_string = re.search(r'\W*{}{}'.format("Date of Birth", word * 4), text, re.IGNORECASE)
@@ -51,16 +66,16 @@ def get_age_from_date_of_birth(text):
                 if age >= 0:
                     return age
 
-
-
     return None
 
 
 def get_age_from_text(text, n):
-    '''Searches for text, and retrieves n words either side of the text, which are retuned seperatly'''
-    word = r"\W*([\w]+)"
-  #  print('TEXT:')
-   # print(text)
+    """ Search for words that are written next to the person's age. The most common cases are searched first
+
+    @param text: first 200 words of the patient's discharge summary (TEXT column)
+    @param n: integer, number of words to search around the specified word
+    @return: integer number for age or None
+    """
 
     age = get_age_search_word(text, "year", n)
 
@@ -77,6 +92,7 @@ def get_age_from_text(text, n):
         age = get_age_search_word(text, "age", n)
 
     if age is None:
+        # age mentioned next to F letter standing for Female
         age = re.search(r'\d{2} F', text, re.IGNORECASE)
         if age is None:
             age = re.search(r'\d{2}F', text, re.IGNORECASE)
@@ -85,6 +101,7 @@ def get_age_from_text(text, n):
             age = age.group(0)[:2]
 
     if age is None:
+        # age mentioned next to M letter standing for Male
         age = re.search(r'\d{2} M', text, re.IGNORECASE)
         if age is None:
             age = re.search(r'\d{2}M', text, re.IGNORECASE)
@@ -92,13 +109,16 @@ def get_age_from_text(text, n):
         if age is not None:
             age = age.group(0)[:2]
 
-    # print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEEEEEEEEE', age)
     return age
 
 
 def get_age_search_word(text, search_word, n):
-    #print('text ', text)
-    #print('word', search_word)
+    """
+    @param text: first 200 words of the patient's discharge summary (TEXT column)
+    @param search_word: string that is possibly written next to the person's age
+    @param n: integer, number of words to search around the specified word
+    @return: integer number for age or None
+    """
 
     word = r"\W*([\w]+)"
     age = re.search(r'{}\W*{}{}'.format(word * n, search_word, word * n), text, re.IGNORECASE)

@@ -8,19 +8,23 @@ import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
 from sklearn.model_selection import cross_val_score
 from sklearn import metrics
-
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import confusion_matrix
 global model
+from sklearn import metrics, cross_validation
 
 
-def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, threshold, solver):
-    """ :param train_TEXT: TEXT column of train dataframe
-        :param train_OUTPUT: OUTPUT column of train dataframe
-        :param test_TEXT: TEXT column of test dataframe
-        :param test_OUTPUT: OUTPUT column of test dataframe
-        :param threshold: threshold value
-
-    Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
+def get_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
+    """Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
     Classify patients to positives and negatives depending on the threshold
+
+    @param train_TEXT: TEXT column of train dataframe
+    @param train_OUTPUT: OUTPUT column of train dataframe
+    @param test_TEXT: TEXT column of test dataframe
+    @param threshold: threshold value
+    @param solver: type of solver for Logistic Regression
+    @return: predicted_OUTPUT: list of 0 and 1 predictions for each row in the test set
+             prediction_probs: list of probabilities between 0 and 1 for each row in the test set
     """
     global model
 
@@ -36,12 +40,11 @@ def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, test_OUTPUT, 
     # classify samples into two classes depending on the probabilities
     predicted_OUTPUT = np.where(prediction_probs > threshold, 1, 0)
 
-    return test_OUTPUT, predicted_OUTPUT, prediction_probs
+    return predicted_OUTPUT, prediction_probs
 
 
 def plot_word_importance():
-    """
-    Plot the importance of words when making a positive prediction and negative prediction
+    """ Plot the importance of words when making a positive prediction and negative prediction
     """
 
     sorted_word_weight = get_sorted_word_importance_dict()
@@ -52,27 +55,22 @@ def plot_word_importance():
     for word in list(sorted_word_weight)[0:30]:
         negative_importance[word] = sorted_word_weight[word]
 
-    print(negative_importance)
-
     for word in list(reversed(list(sorted_word_weight)))[0:30]:
         positive_importance[word] = sorted_word_weight[word]
-
-    print(positive_importance)
 
     plot_one_side_importance(positive_importance, "plots/positive.png")
     plot_one_side_importance(negative_importance, "plots/negative.png")
 
 
 def get_sorted_word_importance_dict():
-    """ :return: a dictionary of word-value pairs. Values are associated with the importance
-        of the words given the model. Dictionary is sorted by value in an increasing order
+    """ Form a dictionary of words (or groups of adjacent words depending on the selected ngram) and importance values
 
+    @return: a dictionary of word-value pairs. Values are associated with the importance
+        of the words given the model. Dictionary is sorted by value in an increasing order
     """
+
     # weights associated to words in list_words
     weights = model.coef_
-    abs_weights = np.abs(weights)
-    print('WEIGHTS:')
-    print(abs_weights)
 
     list_words = get_feature_names()
 
@@ -86,6 +84,11 @@ def get_sorted_word_importance_dict():
 
 
 def plot_one_side_importance(importance_dict, image_filedir):
+    """ Draw the word importance diagram when the word-value dictionary is given
+
+    @param importance_dict: 30 most important (pos or neg) words sorted by the importance value
+    @param image_filedir: directory where the diagram is saved using png format
+    """
     word_plt.rcdefaults()
     fig, ax = word_plt.subplots()
 
@@ -97,11 +100,6 @@ def plot_one_side_importance(importance_dict, image_filedir):
     ax.set_title('Importance of words')
     word_importance_fig = word_plt.gcf()
     word_importance_fig.tight_layout()
-    # word_plt.show()
+
     word_plt.draw()
     word_importance_fig.savefig(image_filedir)
-   # word_plt.clf()
-
-    # ax.invert_yaxis()
-  #  word_plt.clf()
-

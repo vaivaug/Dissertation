@@ -26,3 +26,6 @@ else:
     # enter parameters from Gui
     run_gui()
 
+
+# for each balancing type, we run the code with different solvers, different thresholds and different ngrams
+# def run_experiments(results_file, balancing_type):
