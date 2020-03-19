@@ -9,7 +9,7 @@ from data_preparation.train_test_data import get_train_test_datasets
 from balance_train_data.sub_sampling_negatives import get_sub_sampling_negatives_data
 import nltk
 nltk.download('punkt')
-from models.LogisticRegression import get_predicted_OUTPUT, plot_word_importance
+from models.LogisticRegression import get_test_predicted_OUTPUT, plot_word_importance
 from evaluation.auc import plot_AUC
 from evaluation.confusion_matrix import *
 from balance_train_data.over_sampling_positives import get_over_sampling_positives_data
@@ -53,7 +53,7 @@ def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
                                                                                      solver,
                                                                                      ngram_min,
                                                                                      ngram_max)
-    # plot confucion_matrix, AUC, print accuracy
+    # plot confusion_matrix, AUC, print accuracy
     plot_evaluation_metrics(test.OUTPUT, predicted_OUTPUT, prediction_probs)
 
 
@@ -93,20 +93,11 @@ def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, n
         train_OUTPUT = train.OUTPUT
 
     # create model
-    '''
-    test_OUTPUT, predicted_OUTPUT, prediction_probs = get_test_predicted_OUTPUT(train_TEXT,
-                                                                                train_OUTPUT,
-                                                                                test_TEXT,
-                                                                                test.OUTPUT,
-                                                                                threshold=threshold,
-                                                                                solver=solver)
-    #print('cross validation results: ')
-    '''
-    predicted_OUTPUT, prediction_probs = get_predicted_OUTPUT(train_TEXT,
-                                                                                train_OUTPUT,
-                                                                                test_TEXT,
-                                                                                threshold=threshold,
-                                                                                solver=solver)
+    predicted_OUTPUT, prediction_probs = get_test_predicted_OUTPUT(train_TEXT,
+                                                                   train_OUTPUT,
+                                                                   test_TEXT,
+                                                                   threshold=threshold,
+                                                                   solver=solver)
 
     return predicted_OUTPUT, prediction_probs
 

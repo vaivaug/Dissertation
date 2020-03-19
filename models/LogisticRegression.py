@@ -6,15 +6,10 @@ from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as word_plt
 import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
-from sklearn.model_selection import cross_val_score
-from sklearn import metrics
-from sklearn.model_selection import cross_val_predict
-from sklearn.metrics import confusion_matrix
 global model
-from sklearn import metrics, cross_validation
 
 
-def get_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
+def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
     """Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
     Classify patients to positives and negatives depending on the threshold
 
