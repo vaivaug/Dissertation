@@ -23,15 +23,32 @@ Questions:
 1. Run experiments 3*5 = 15 output files (3 different balancing types, 5 different solvers)
 For each out of 15, we run different thresholds and ngrams.
 
-2. thresholds: 0.05, 0.1, 0.15, 0.2 ....,  0.95 ? (every 0.05)
+2. thresholds: 0, 0.05, 0.1, 0.15, 0.2 ....,  0.95,  1 ? (every 0.05)
    ngrams:  (1, 1); (1, 2); (1, 3); (2, 2); (2, 3); (3, 3) ?    Do I need 4?
 
-3. which evaluation parameters to store: AUC, Accuracy, Confusion Matrix?  (one of them or all of them)
+   run 5 random ones, if oversampling is a win for most of them, then
+
+3. which evaluation parameters to store: AUC
+plot states: parameters
+store only AUC
+confidence interval
+percentage of false negative
+output AUC plots, with some text
 
 4. The best will be the one with the lowest FN, and quiet low top right corner? Keep percentages of both?
 
+5. I need to have diagrams about the best C and max_features values, Do I do it before experiments or after the experiments,
+with the best threshold and solver type
+NOT
 4. Using test, validation and train. Not touching test at all. treat validation as test.
-So do the cross validation: on train ; or on train+validation ?
+So do the cross validation: on train ; ?
 
-5.
+5. Do I need diagrams from the article, Learning Curve, run on training predictions and validation prediction
+
+6. at which point do I run on test set
+
+7. I can write the paper after.
+
+
+
 
