@@ -6,7 +6,7 @@ and plotting the prediction results
 from tkinter import *
 from tkinter.ttk import *
 global threshold, balancing_type, solver, ngram_start, ngram_end
-from end_to_end import run_end_to_end
+from end_to_end import get_data_train_predict, plot_evaluation_metrics
 #from PIL import ImageTk, Image
 
 global threshold, data_balancing_type, solver, ngram_start, ngram_end
@@ -32,8 +32,13 @@ def run_gui():
 
 def clicked():
 
-    run_end_to_end(float(threshold.get()), data_balancing_type.get(), solver.get(),
-                   int(ngram_min.get()), int(ngram_max.get()))
+    test_OUTPUT, predicted_OUTPUT, prediction_probs = get_data_train_predict(float(threshold.get()),
+                                                                             data_balancing_type.get(),
+                                                                             solver.get(),
+                                                                             int(ngram_min.get()),
+                                                                             int(ngram_max.get()))
+    # plot confusion_matrix, AUC, print accuracy
+    plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs)
 
     # show_output_images(window)
 

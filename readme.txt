@@ -50,5 +50,7 @@ So do the cross validation: on train ; ?
 7. I can write the paper after.
 
 
+Plan:
+1. do the cross validation on train set, have separate function for running on validation or test sets
 
 

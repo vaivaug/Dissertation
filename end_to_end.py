@@ -20,7 +20,7 @@ from balance_train_data.smote_sample import get_smote_data
 results_on_validation = True
 
 
-def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
+def get_data_train_predict(threshold, balancing_type, solver, ngram_min, ngram_max):
     """ Get clean data, call run_model_on_balanced_data function and evaluate the predictions
 
     @param threshold: a float number between 0 and 1, decision threshold parameter
@@ -53,8 +53,8 @@ def run_end_to_end(threshold, balancing_type, solver, ngram_min, ngram_max):
                                                                                      solver,
                                                                                      ngram_min,
                                                                                      ngram_max)
-    # plot confusion_matrix, AUC, print accuracy
-    plot_evaluation_metrics(test.OUTPUT, predicted_OUTPUT, prediction_probs)
+
+    return test.OUTPUT, predicted_OUTPUT, prediction_probs
 
 
 def run_model_on_balanced_data(balancing_type, train, test, threshold, solver, ngram_min, ngram_max):
@@ -124,10 +124,3 @@ def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs):
 
     # illustrate area under the ROC curve
     plot_AUC(test_OUTPUT, prediction_probs)
-
-
-'''
-def append_results_file(filedir, threshold, solver, ngram_min, ngram_max):
-    with open(filedir, 'a') as fd:
-        fd.write()
-'''
