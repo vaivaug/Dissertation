@@ -6,10 +6,11 @@ from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as word_plt
 import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
+from sklearn.model_selection import cross_val_predict
 global model
 
 
-def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
+def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
     """Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
     Classify patients to positives and negatives depending on the threshold
 
@@ -36,6 +37,32 @@ def get_test_predicted_OUTPUT(train_TEXT, train_OUTPUT, test_TEXT, threshold, so
     predicted_OUTPUT = np.where(prediction_probs > threshold, 1, 0)
 
     return predicted_OUTPUT, prediction_probs
+
+
+def get_predicted_on_train_LR(train_TEXT, train_OUTPUT, threshold, solver):
+    """Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
+    Classify patients to positives and negatives depending on the threshold
+
+    @param train_TEXT: TEXT column of train dataframe
+    @param train_OUTPUT: OUTPUT column of train dataframe
+    @param test_TEXT: TEXT column of test dataframe
+    @param threshold: threshold value
+    @param solver: type of solver for Logistic Regression
+    @return: predicted_OUTPUT: list of 0 and 1 predictions for each row in the test set
+             prediction_probs: list of probabilities between 0 and 1 for each row in the test set
+    """
+    global model
+
+    # logistic regression
+    model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
+
+    predicted_probs = cross_val_predict(model, train_TEXT, train_OUTPUT, cv=5, method='predict_proba')
+    predicted_probs = predicted_probs[:, 1]
+
+    # classify samples into two classes depending on the probabilities
+    predicted_OUTPUT = np.where(predicted_probs > threshold, 1, 0)
+
+    return predicted_OUTPUT, predicted_probs
 
 
 def plot_word_importance():

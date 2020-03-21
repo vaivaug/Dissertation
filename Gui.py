@@ -6,7 +6,7 @@ and plotting the prediction results
 from tkinter import *
 from tkinter.ttk import *
 global threshold, balancing_type, solver, ngram_start, ngram_end
-from end_to_end import get_data_train_predict, plot_evaluation_metrics
+from program_run_start_to_end import predict_test_validation_set, plot_evaluation_metrics, predict_cross_val_train_set
 #from PIL import ImageTk, Image
 
 global threshold, data_balancing_type, solver, ngram_start, ngram_end
@@ -32,7 +32,7 @@ def run_gui():
 
 def clicked():
 
-    test_OUTPUT, predicted_OUTPUT, prediction_probs = get_data_train_predict(float(threshold.get()),
+    test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_test_validation_set(float(threshold.get()),
                                                                              data_balancing_type.get(),
                                                                              solver.get(),
                                                                              int(ngram_min.get()),
