@@ -13,23 +13,24 @@ parameters_set_manually = True
 if parameters_set_manually:
 
     threshold = 0.4
-    balancing_types = ['SMOTE', 'sub-sample negatives', 'over-sample positives']
+    balancing_types = ["SMOTE", "sub-sample negatives", "over-sample positives"]
     solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
     ngram_min = 1
     ngram_max = 1
     print('on validation set: ')
-    test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_test_validation_set(threshold, balancing_types[1],
-                                                                             solvers[2], ngram_min, ngram_max)
+    test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_test_validation_set(threshold, balancing_types[2],
+                                                                             solvers[1], ngram_min, ngram_max)
     # plot confusion_matrix, AUC, print accuracy
-    plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_types[1], solvers[1], threshold, ngram_min, ngram_max)
+    plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_types[2], solvers[1], threshold, ngram_min, ngram_max)
     get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
 
     print('on train cross validation: ')
-    test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(threshold, balancing_types[1],
-                                                                                  solvers[2], ngram_min, ngram_max)
+    train_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(threshold, balancing_types[2],
+                                                                                  solvers[1], ngram_min, ngram_max)
+
     # plot confusion_matrix, AUC, print accuracy
-    plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_types[1], solvers[1], threshold, ngram_min, ngram_max)
-    get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
+    plot(train_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_types[2], solvers[1], threshold, ngram_min, ngram_max)
+    get_confusion_matrix(train_OUTPUT, predicted_OUTPUT)
 else:
     # enter parameters from Gui
     run_gui()

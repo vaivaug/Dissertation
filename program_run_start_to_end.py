@@ -115,6 +115,7 @@ def balance_and_run_test_valid_LR(balancing_type, train, test, threshold, solver
             train = get_sub_sampling_negatives_data(train)
 
         elif balancing_type == "over-sample positives":
+            print('balances data validation set')
             train = get_over_sampling_positives_data(train)
 
         train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
@@ -159,6 +160,7 @@ def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngr
             train = get_sub_sampling_negatives_data(train)
 
         elif balancing_type == "over-sample positives":
+            print('balances data train cross validation')
             train = get_over_sampling_positives_data(train)
 
         train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
