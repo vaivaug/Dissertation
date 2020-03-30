@@ -46,6 +46,8 @@ def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ng
                                                                 solver,
                                                                 ngram_min,
                                                                 ngram_max)
+
+        return validation.OUTPUT, predicted_OUTPUT, prediction_probs
     else:
         predicted_OUTPUT, prediction_probs = balance_and_run_test_valid_LR(balancing_type,
                                                                 train,
@@ -55,7 +57,7 @@ def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ng
                                                                 ngram_min,
                                                                 ngram_max)
 
-    return test.OUTPUT, predicted_OUTPUT, prediction_probs
+        return test.OUTPUT, predicted_OUTPUT, prediction_probs
 
 
 def predict_cross_val_train_set(threshold, balancing_type, solver, ngram_min, ngram_max):
@@ -115,11 +117,12 @@ def balance_and_run_test_valid_LR(balancing_type, train, test, threshold, solver
             train = get_sub_sampling_negatives_data(train)
 
         elif balancing_type == "over-sample positives":
-            print('balances data validation set')
             train = get_over_sampling_positives_data(train)
 
         train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
         train_OUTPUT = train.OUTPUT
+
+    print(train_OUTPUT.value_counts())
 
     predicted_OUTPUT, prediction_probs = get_predicted_on_test_LR(train_TEXT,
                                                                       train_OUTPUT,
@@ -160,12 +163,12 @@ def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngr
             train = get_sub_sampling_negatives_data(train)
 
         elif balancing_type == "over-sample positives":
-            print('balances data train cross validation')
             train = get_over_sampling_positives_data(train)
 
         train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
         train_OUTPUT = train.OUTPUT
 
+    print(train_OUTPUT.value_counts())
     # create model
     predicted_OUTPUT, prediction_probs = get_predicted_on_train_LR(train_TEXT,
                                                                        train_OUTPUT,

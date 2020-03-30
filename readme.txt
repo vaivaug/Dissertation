@@ -52,5 +52,24 @@ So do the cross validation: on train ; ?
 
 Plan:
 1. do the cross validation on train set, have separate function for running on validation or test sets
+2. confidence interval to output picture
 
 
+
+
+First, the article I am using
+https://towardsdatascience.com/introduction-to-clinical-natural-language-processing-predicting-hospital-readmission-with-1736d52bc709
+referst to 'test set' to be the one used at the end to check overfitting and 'validation set' to be the one used
+earlier when evaluating model performance. Therefore, I use the same definitions for both.
+
+Questions:
+I have cross validation for training data implemented, however since the data balancing techniques are used before
+the cross validation, model is overfitting. For example, when using over sampling positives and then running the cross
+validation, identical rows can be in both, train and validation datasets.
+Therefore, since I have a lot of data, it should be okay to fit the model with the train data,
+run it against validation set
+
+email tom:
+explain that validation and test set differences.
+explain why Im running experiments on validation set
+show the picture fir experiments ask if its ok
