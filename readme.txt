@@ -73,3 +73,8 @@ email tom:
 explain that validation and test set differences.
 explain why Im running experiments on validation set
 show the picture fir experiments ask if its ok
+
+
+For next meeting Friday April 3rd:
+1. Should I do some data visualisation, e.g. number of words in the discharge summaries, length of discharge summaries.
+

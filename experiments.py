@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from math import sqrt
 from evaluation.confusion_matrix import get_confusion_matrix
 import random
+import os.path
+from os import path
 
 
 # for each balancing type, we run the code with different solvers, different thresholds and different ngrams
@@ -15,14 +17,19 @@ def run_experiment_balance_solver(balancing_type, solver):
 
     for threshold in thresholds_list:
         for ngram in ngrams_list:
-            print('threshold: ', threshold, '  ngram: ', ngram[0], '  ', ngram[1])
-            test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(round(threshold, 2),
-                                                                                          balancing_type,
-                                                                                          solver,
-                                                                                          ngram[0],
-                                                                                          ngram[1])
-            plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, round(threshold, 2), ngram[0],
-                                  ngram[1])
+            # only run the experiment if it was not run before
+            if not path.exists('experiment_plots/{}-{}-{}-({},{}).png'.format(balancing_type, solver,
+                                                                          threshold, ngram[0], ngram[1])):
+
+
+                print('threshold: ', threshold, '  ngram: ', ngram[0], '  ', ngram[1])
+                test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(round(threshold, 2),
+                                                                                              balancing_type,
+                                                                                              solver,
+                                                                                              ngram[0],
+                                                                                              ngram[1])
+                plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, round(threshold, 2), ngram[0],
+                                      ngram[1])
 
 
 def run_all_experiments():
