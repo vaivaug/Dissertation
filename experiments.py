@@ -15,7 +15,7 @@ def run_experiment_balance_solver(balancing_type, solver):
 
     for threshold in thresholds_list:
         for ngram in ngrams_list:
-
+            print('threshold: ', threshold, '  ngram: ', ngram[0], '  ', ngram[1])
             test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(round(threshold, 2),
                                                                                           balancing_type,
                                                                                           solver,
