@@ -10,7 +10,7 @@ import random
 # for each balancing type, we run the code with different solvers, different thresholds and different ngrams
 def run_experiment_balance_solver(balancing_type, solver):
 
-    thresholds_list = np.arange(0.15, 1.05, 0.05)
+    thresholds_list = np.arange(0, 1.05, 0.05)
     ngrams_list = [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]]
 
     for threshold in thresholds_list:
