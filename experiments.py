@@ -19,7 +19,7 @@ def run_experiment_balance_solver(balancing_type, solver):
         for ngram in ngrams_list:
             # only run the experiment if it was not run before
             if not path.exists('experiment_plots/{}-{}-{}-({},{}).png'.format(balancing_type, solver,
-                                                                          threshold, ngram[0], ngram[1])):
+                                                                              round(threshold, 2), ngram[0], ngram[1])):
 
 
                 print('threshold: ', threshold, '  ngram: ', ngram[0], '  ', ngram[1])
