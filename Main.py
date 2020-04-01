@@ -8,10 +8,10 @@ from experiments import plot
 from evaluation.confusion_matrix import get_confusion_matrix
 from models.LogisticRegression import plot_word_importance
 
-# variable to know if parameters are entered from Gui or manually
-parameters_set_manually = True
+# variable to know if parameters are entered from Gui or manually selected in the code
+set_parameters_gui = True
 
-if parameters_set_manually:
+if not set_parameters_gui:
 
     threshold = 0.4
     balancing_types = ["SMOTE", "sub-sample negatives", "over-sample positives"]

@@ -7,12 +7,15 @@ from tkinter import *
 from tkinter.ttk import *
 global threshold, balancing_type, solver, ngram_start, ngram_end
 from program_run_start_to_end import predict_test_validation_set, plot_evaluation_metrics, predict_cross_val_train_set
-#from PIL import ImageTk, Image
+from PIL import ImageTk, Image
 
 global threshold, data_balancing_type, solver, ngram_start, ngram_end
+global window
 
 
 def run_gui():
+
+    global window
 
     window = Tk()
     window.title("Program Parameters and Model Results")
@@ -40,21 +43,20 @@ def clicked():
     # plot confusion_matrix, AUC, print accuracy
     plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs)
 
-    # show_output_images(window)
+    show_output_images(window)
 
-'''
+
 def show_output_images(window):
-    path = "plots/conf_matrix.jpg"
+    path = "plots/conf_matrix_plt.png"
 
     # Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
     img = ImageTk.PhotoImage(Image.open(path))
 
     # The Label widget is a standard Tkinter widget used to display a text or image on the screen.
-    panel = tk.Label(window, image=img)
+    panel = Label(window, image=img)
 
     # The Pack geometry manager packs widgets in rows or columns.
     panel.pack(side="bottom", fill="both", expand="yes")
-'''
 
 
 def create_threshold_param(window):

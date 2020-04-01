@@ -144,6 +144,6 @@ def get_text_coordinates(balancing_type):
         return 0.465, 0.36
 
 
-run_all_experiments()
+# run_all_experiments()
 # run_experiment_balance_solver('SMOTE', 'lbfgs')
 # run_random_experiments_for_balancing_types()
