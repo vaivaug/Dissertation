@@ -41,22 +41,23 @@ def clicked():
                                                                              int(ngram_min.get()),
                                                                              int(ngram_max.get()))
     # plot confusion_matrix, AUC, print accuracy
-    plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs)
+    plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs, data_balancing_type.get(),
+                            solver.get(), float(threshold.get()), int(ngram_min.get()), int(ngram_max.get()))
 
     show_output_images(window)
 
 
 def show_output_images(window):
     path = "plots/conf_matrix_plt.png"
+    image = Image.open(path)
+    image = image.resize((400, 300), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+
+    label = Label(image=photo)
+    label.image = photo  # this line need to prevent gc
+    label.grid(column=0, row=7, columnspan=2, padx=11, pady=11)
 
     # Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
-    img = ImageTk.PhotoImage(Image.open(path))
-
-    # The Label widget is a standard Tkinter widget used to display a text or image on the screen.
-    panel = Label(window, image=img)
-
-    # The Pack geometry manager packs widgets in rows or columns.
-    panel.pack(side="bottom", fill="both", expand="yes")
 
 
 def create_threshold_param(window):

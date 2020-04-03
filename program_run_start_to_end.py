@@ -178,7 +178,8 @@ def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngr
     return train_OUTPUT, predicted_OUTPUT, prediction_probs
 
 
-def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs):
+def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type,
+                            solver, threshold, ngram_min, ngram_max):
     """ Plot positive and negative word importance, plot confusion matrix, area under the ROC curve,
     print the accuracy, precision and recall scores
 
@@ -194,9 +195,5 @@ def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs):
     cnf_matrix = get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
     plot_confusion_matrix(cnf_matrix)
 
-    print("Accuracy:", metrics.accuracy_score(test_OUTPUT, predicted_OUTPUT))
-    print("Precision:", metrics.precision_score(test_OUTPUT, predicted_OUTPUT))
-    print("Recall:", metrics.recall_score(test_OUTPUT, predicted_OUTPUT))
-
     # illustrate area under the ROC curve
-    plot_AUC(test_OUTPUT, prediction_probs)
+    plot_AUC(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, threshold, ngram_min, ngram_max)
