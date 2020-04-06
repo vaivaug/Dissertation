@@ -33,6 +33,8 @@ def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ng
     # read and clean input data
     notes_adm = get_clean_dataframe()
 
+    print(notes_adm['OUTPUT'].value_counts())
+
     # all data split into train, test and validation sets
     # treat validation set as test set for now
     # do not touch test set till the end now

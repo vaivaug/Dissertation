@@ -41,7 +41,7 @@ def get_notes_dataframe():
     @return: pandas dataframe containing data from noteevents table
     """
 
-    notes = pd.read_csv(filedir_notes, nrows=10000)
+    notes = pd.read_csv(filedir_notes)
     # select only the discharge summary column
     notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
 
