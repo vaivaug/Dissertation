@@ -34,9 +34,8 @@ def run_experiment_balance_solver(balancing_type, solver):
 
 def run_all_experiments():
 
-    balancing_types = ['SMOTE', 'over-sample positives']
-    # solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
-    solvers = ['liblinear', 'sag', 'saga']
+    balancing_types = ['sub-sample negatives', 'SMOTE', 'over-sample positives']
+    solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
 
     # for each pair of balancing type and solver, run experiments with different threshold and ngram values
     for balancing_type in balancing_types:
