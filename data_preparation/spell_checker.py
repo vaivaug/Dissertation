@@ -33,10 +33,7 @@ from spellchecker import SpellChecker
 
 
 def get_correctly_spelled(text, spell):
-    #print('text beforeeeeeeeeeeeeeeeeeee: ', text)
     #text = text.translate(str.maketrans('', '', string.punctuation))
-    #print('text afterRRRRRRRRRRRRRRRRRRRRRR:', text)
-   #  text = text.translate(str.maketrans('', '', string.punctuation))
     text = text.split()
 
     # find those words that may be misspelled

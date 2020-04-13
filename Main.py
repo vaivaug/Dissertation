@@ -15,16 +15,24 @@ set_parameters_gui = True
 
 if not set_parameters_gui:
 
-    threshold = 0.4
+    threshold = 0.45
     balancing_type = balancing_types[1]
-    solver = solvers[0]
+    solver = solvers[2]
     ngram_min = 1
-    ngram_max = 2
+    ngram_max = 3
+    # '''
     test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_test_validation_set(threshold, balancing_type,
                                                                              solver, ngram_min, ngram_max)
     # plot confusion_matrix, AUC, print accuracy
     plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs,
                             balancing_type, solver, threshold, ngram_min, ngram_max)
+    '''
+    test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(threshold, balancing_type,
+                                                                                  solver, ngram_min, ngram_max)
+    # plot confusion_matrix, AUC, print accuracy
+    plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs,
+                            balancing_type, solver, threshold, ngram_min, ngram_max)
+    # '''
 
 else:
     # enter parameters from Gui

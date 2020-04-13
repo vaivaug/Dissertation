@@ -7,7 +7,6 @@ import matplotlib.pyplot as word_plt
 import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
 from sklearn.model_selection import cross_val_predict
-import statsmodels.api as sm
 global model
 
 
@@ -27,6 +26,7 @@ def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, sol
 
     # logistic regression
     model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
+    # model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
 
     # fit the model with training data. return fitted estimator
     model.fit(train_TEXT, train_OUTPUT)

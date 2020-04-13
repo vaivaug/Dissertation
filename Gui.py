@@ -20,7 +20,7 @@ def run_gui():
     window = Tk()
     window.title("Program Parameters and Model Results")
     window.configure(background='peach puff')
-    window.geometry('800x600')
+    window.geometry('800x590')
 
     create_threshold_param(window)
     create_data_balance_param(window)
@@ -48,16 +48,27 @@ def clicked():
 
 
 def show_output_images(window):
-    path = "plots/conf_matrix_plt.png"
-    image = Image.open(path)
-    image = image.resize((400, 300), Image.ANTIALIAS)
+
+    # explanation of 1 and 0
+    conf_matrix_values = Label(window, text="  Predicted values: 1 - at risk of lung cancer, 0 - not at risk of lung cancer")
+    conf_matrix_values.config(font=("Courier bold", 12), background='peach puff')
+    conf_matrix_values.grid(column=0, row=7, columnspan=3, sticky=W, padx=10, pady=10)
+
+    # AUC
+    path = "plots/auc_plt.png"
+    image = Image.open(path).resize((360, 300), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
-
     label = Label(image=photo)
-    label.image = photo  # this line need to prevent gc
-    label.grid(column=0, row=7, columnspan=2, padx=11, pady=11)
+    label.image = photo
+    label.grid(column=0, row=8, columnspan=2, padx=11, pady=11)
 
-    # Creates a Tkinter-compatible photo image, which can be used everywhere Tkinter expects an image object.
+    # confusion matrix
+    path = "plots/conf_matrix_plt.png"
+    image = Image.open(path).resize((360, 300), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo
+    label.grid(column=2, row=8, columnspan=2, padx=11, pady=11)
 
 
 def create_threshold_param(window):
@@ -96,7 +107,7 @@ def create_solver_selection(window):
     global solver
 
     # label
-    solver_label = Label(window, text="  Linear Regression Solver: ")
+    solver_label = Label(window, text="  Logistic Regression Solver: ")
     solver_label.config(font=("Courier bold", 12), background='peach puff')
     solver_label.grid(column=0, row=4, sticky=W, padx=10, pady=10)
 
