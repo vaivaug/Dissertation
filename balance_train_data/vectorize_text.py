@@ -23,8 +23,6 @@ def get_vectorized_train_test(train, test, ngram_min, ngram_max):
     vectorizer = CountVectorizer(max_features=3000, tokenizer=get_tokenizer, stop_words=get_stop_words(),
                                  ngram_range=(ngram_min, ngram_max))
 
-    print("this can take longer")
-
     # create term-document matrices
     train_TEXT = vectorizer.fit_transform(train.TEXT.values)
     test_TEXT = vectorizer.transform(test.TEXT.values)

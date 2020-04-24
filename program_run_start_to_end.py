@@ -17,7 +17,7 @@ from balance_train_data.smote_sample import get_smote_data
 
 
 # variable to check if the model is run on validation or test set
-results_on_validation = True
+results_on_validation = False
 
 
 def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ngram_max):

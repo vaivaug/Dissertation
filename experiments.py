@@ -1,3 +1,6 @@
+"""
+File to be run in order to plot evaluation metrics for different combination of parameters
+"""
 from program_run_start_to_end import predict_cross_val_train_set, predict_test_validation_set
 import numpy as np
 import sklearn.metrics as metrics
@@ -9,8 +12,13 @@ import os.path
 from os import path
 
 
-# for each balancing type, we run the code with different solvers, different thresholds and different ngrams
 def run_experiment_balance_solver(balancing_type, solver):
+    """ For each balancing type, we run the code with different solvers, different thresholds and different ngrams
+    Result plot is saved in a file with unique name.
+
+    @param balancing_type: string, one of the 3 data balancing types
+    @param solver: string, one of the 5 available solvers
+    """
 
     thresholds_list = np.arange(0, 1.05, 0.05)
     ngrams_list = [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]]
@@ -21,44 +29,43 @@ def run_experiment_balance_solver(balancing_type, solver):
             if not path.exists('experiment_plots/{}-{}-{}-({},{}).png'.format(balancing_type, solver,
                                                                               round(threshold, 2), ngram[0], ngram[1])):
 
-
-                print('threshold: ', threshold, '  ngram: ', ngram[0], '  ', ngram[1])
                 test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(round(threshold, 2),
                                                                                               balancing_type,
                                                                                               solver,
                                                                                               ngram[0],
                                                                                               ngram[1])
-                plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, round(threshold, 2), ngram[0],
-                                      ngram[1])
+                plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver,
+                     round(threshold, 2), ngram[0], ngram[1])
 
 
 def run_all_experiments():
+    """ For each pair of balancing type and solver, run experiments with different threshold and ngram values
+    """
 
     balancing_types = ['sub-sample negatives', 'SMOTE', 'over-sample positives']
     solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
 
-    # for each pair of balancing type and solver, run experiments with different threshold and ngram values
     for balancing_type in balancing_types:
         for solver in solvers:
-            print('Balancing type: ', balancing_type, '   solver:  ', solver)
             run_experiment_balance_solver(balancing_type, solver)
 
 
-def run_random_experiments_for_balancing_types():
+def run_random_experiments_on_test_set():
+    """Select random solver, random threshold and random ngram values
+    Run experiments with those random parameters on each balancing type
+    """
 
     balancing_types = ['SMOTE', 'sub-sample negatives', 'over-sample positives']
     solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
     ngrams_list = [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]]
 
-    # select random solver, random threshold and random ngrams
-    # run experiment with those random parameters on each balancing type
     for exp in range(0, 5):
         random_ngram = ngrams_list[random.randint(0, 5)]
         random_solver = solvers[random.randint(0, 4)]
         random_threshold = round(random.uniform(0, 1), 2)
 
         for balancing_type in balancing_types:
-            test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_cross_val_train_set(random_threshold,
+            test_OUTPUT, predicted_OUTPUT, prediction_probs = predict_test_validation_set(random_threshold,
                                                                                           balancing_type,
                                                                                           random_solver,
                                                                                           random_ngram[0],
@@ -68,7 +75,8 @@ def run_random_experiments_for_balancing_types():
 
 
 def plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, threshold, ngram_min, ngram_max):
-
+    """ Plot the evaluation metrics given the parameters, prediction probabilities and predicted values
+    """
     fig, ax = plt.subplots()
 
     # true positive rate
@@ -127,10 +135,9 @@ def plot(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver
 
     plt_fig = plt.gcf()
     plt_fig.tight_layout()
+
     plt_fig.savefig('experiment_plots/{}-{}-{}-({},{}).png'.format(
        balancing_type, solver, threshold, ngram_min, ngram_max))
-
-    # plt.show()
 
 
 def get_text_coordinates(balancing_type):
@@ -144,5 +151,4 @@ def get_text_coordinates(balancing_type):
 
 
 run_all_experiments()
-# run_experiment_balance_solver('SMOTE', 'lbfgs')
-# run_random_experiments_for_balancing_types()
+# run_random_experiments_on_test_set()
