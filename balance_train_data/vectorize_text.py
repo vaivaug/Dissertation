@@ -49,11 +49,11 @@ def get_stop_words():
     @return: stop_words: list of stop words
     """
     stop_words = ['the', 'and', 'to', 'of', 'was', 'with', 'a', 'on', 'in', 'for', 'name', 'is',
-                     'patient', 's', 'he', 'at', 'as', 'or', 'one', 'she', 'his', 'her', 'am',
-                     'were', 'you', 'pt', 'pm', 'by', 'be', 'had', 'your', 'this', 'date', 'from',
-                     'there', 'an', 'that', 'p', 'are', 'have', 'has', 'h', 'but', 'o', 'namepattern',
-                     'which', 'every', 'also', 'should', 'if', 'it', 'been', 'b', 'w', 'who', 'during',
-                     'any', 'c', 'd', 'x', 'i', 'all', 'please']
+                  'patient', 's', 'he', 'at', 'as', 'or', 'one', 'she', 'his', 'her', 'am',
+                  'were', 'you', 'pt', 'pm', 'by', 'be', 'had', 'your', 'this', 'date', 'from',
+                  'there', 'an', 'that', 'p', 'are', 'have', 'has', 'h', 'but', 'o', 'namepattern',
+                  'which', 'every', 'also', 'should', 'if', 'it', 'been', 'b', 'w', 'who', 'during',
+                  'any', 'c', 'd', 'x', 'i', 'all', 'please']
     return stop_words
 
 

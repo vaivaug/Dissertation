@@ -1,6 +1,7 @@
 """
 Contains a function which adds an AGE column to all the patients in the dataframe.
 If the age is not extracted, column value is NaN
+Age filter was not used at the end
 """
 import numpy as np
 import re
@@ -20,6 +21,7 @@ def get_data_with_age_column(data):
     # initialise age column with NaN
     data['AGE'] = np.nan
 
+    # read
     # iterate through all the patients
     for index, row in data.iterrows():
         # get age from date of birth mentioned in TEXT

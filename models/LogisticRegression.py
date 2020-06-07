@@ -8,6 +8,8 @@ import numpy as np
 from balance_train_data.vectorize_text import get_feature_names
 from sklearn.model_selection import cross_val_predict
 global model
+import pickle
+from sklearn.externals import joblib
 
 
 def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
@@ -26,7 +28,6 @@ def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, sol
 
     # logistic regression
     model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
-    # model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
 
     # fit the model with training data. return fitted estimator
     model.fit(train_TEXT, train_OUTPUT)
@@ -36,6 +37,9 @@ def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, sol
 
     # classify samples into two classes depending on the probabilities
     predicted_OUTPUT = np.where(prediction_probs > threshold, 1, 0)
+
+    # Save the trained model
+    joblib.dump(model, 'saved_model.pkl')
 
     return predicted_OUTPUT, prediction_probs
 

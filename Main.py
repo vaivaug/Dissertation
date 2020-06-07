@@ -8,13 +8,13 @@ balancing_types = ["SMOTE", "sub-sample negatives", "over-sample positives"]
 solvers = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
 
 # variable to know if parameters are entered from Gui or manually selected in the code
-set_parameters_gui = True
+set_parameters_gui = False
 
 if not set_parameters_gui:
 
     threshold = 0.3
     balancing_type = balancing_types[2]
-    solver = solvers[2]
+    solver = solvers[3]
     ngram_min = 1
     ngram_max = 3
 
