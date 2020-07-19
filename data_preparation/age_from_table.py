@@ -41,7 +41,7 @@ def get_data_with_age_column(data):
     data['DOB'] = data['DOB'].where(data['DOB'] < now, data['DOB'] - np.timedelta64(100, 'Y'))
 
     data['AGE'] = (data['CHARTDATE'] - data['DOB']).astype('<m8[Y]')
-    data = data.drop(columns=['CHARTDATE', 'DOB'])
+    data = data.drop(columns=['DOB'])
 
     return data
 

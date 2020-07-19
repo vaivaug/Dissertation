@@ -3,6 +3,7 @@ Contains functions to read the data, select 'discharge summaries', merge tables,
 """
 import numpy as np
 import pandas as pd
+from data_preparation.age_from_table import get_data_with_age_column
 
 filedir_notes = '../NOTEEVENTS.csv'
 filedir_adm = '../ADMISSIONS.csv'
@@ -17,9 +18,21 @@ def get_clean_dataframe():
     notes = get_notes_dataframe()
 
     notes_adm = get_merged_dataframe(notes, adm)
+
     notes_adm = get_dataframe_with_outputs(notes_adm)
     notes_adm = get_dataframe_no_newborn(notes_adm)
     notes_adm = get_clean_TEXT_column(notes_adm)
+    print('here1')
+    print(notes_adm)
+    notes_adm = get_notes_with_age(notes_adm)
+
+    print('here2')
+    print(notes_adm)
+    print('before cancer remove: ', notes_adm['OUTPUT'].value_counts())
+    notes_adm = remove_cancer_rows(notes_adm)
+    print('here3')
+    print(notes_adm)
+    print('after cancer remove: ', notes_adm['OUTPUT'].value_counts())
 
     return notes_adm
 
@@ -43,14 +56,51 @@ def get_notes_dataframe():
 
     notes = pd.read_csv(filedir_notes)
     # select only the discharge summary column
-    notes_dis_sum = notes.loc[notes.CATEGORY == 'Discharge summary']
+    # notes = notes.loc[notes.CATEGORY == 'Discharge summary']
 
-    # join the discharge summaries where multiple exist
-    notes_dis_sum = (notes_dis_sum.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate({'TEXT': 'sum'}).reset_index()
+    # join the discharge summaries where multiple exist, pick minimum chartdate
+    notes_dis_sum_final = (notes.groupby(['SUBJECT_ID', 'HADM_ID'])).aggregate(
+        {'CHARTDATE': 'min', 'TEXT': 'sum'}).reset_index()
 
     # check there is only one discharge summary per person
-    assert notes_dis_sum.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
-    return notes_dis_sum
+    assert notes_dis_sum_final.duplicated(['HADM_ID']).sum() == 0, 'Multiple discharge summaries per admission'
+    return notes_dis_sum_final
+
+
+def remove_cancer_rows(notes):
+    """Lung cancer patients are identified. Make OUTPUT value 1 for all the discharge summaries
+    for lung cancer patients. Then remove rows of lung cancer patients that are after the lung cancer diagnosis
+    (including the lung cancer diagnosis row)
+
+    @return:
+    """
+    subject_ids_checked = []
+    indexes_to_drop = []
+    count_rows_removed = 0
+    lung_cancer_words = ['lung cancer', 'carcinoma', 'cancer', 'lung tumor', 'lung ca', 'small cell ca']
+
+    for cur_index, row in notes.iterrows():
+        subject_ID = row['SUBJECT_ID']
+
+        if row['OUTPUT'] == 1 and subject_ID not in subject_ids_checked:
+
+            # find all rows with the same subject_ID, update OUTPUT values for those rows
+            notes.loc[notes['SUBJECT_ID'] == subject_ID, 'OUTPUT'] = 1
+            indexes = notes.index[notes['SUBJECT_ID'] == subject_ID].tolist()
+
+            for i in indexes:
+                if notes.iloc[i]['CHARTDATE'] >= notes.iloc[cur_index]['CHARTDATE']:
+                    indexes_to_drop.append(i)
+
+            subject_ids_checked.append(subject_ID)
+
+    notes.drop(indexes_to_drop, inplace=True)
+
+    notes = (notes.groupby(['SUBJECT_ID'])).agg({'HADM_ID': lambda col: col.tolist(),
+                                                 'DIAGNOSIS': ','.join, 'TEXT': ' '.join,
+                                                 'AGE': 'max', 'OUTPUT': 'max'}).reset_index()
+
+    return notes
 
 
 def get_merged_dataframe(notes, adm):
@@ -60,11 +110,15 @@ def get_merged_dataframe(notes, adm):
     @param adm: pandas dataframe for admissions table
     @return: merged pandas dataframe
     """
-
-    notes_adm = pd.merge(adm[['HADM_ID','DIAGNOSIS']],
-                            notes[['HADM_ID','TEXT']],
-                            on=['HADM_ID'],
-                            how='left')
+    print('before merge')
+    print('adm')
+    print(adm)
+    print('notes')
+    print(notes)
+    notes_adm = pd.merge(adm[['HADM_ID', 'SUBJECT_ID', 'DIAGNOSIS']],
+                         notes[['HADM_ID', 'CHARTDATE', 'TEXT']],
+                         on=['HADM_ID'],
+                         how='left')
     return notes_adm
 
 
@@ -110,6 +164,7 @@ def get_clean_TEXT_column(notes_adm):
 
     notes_adm.TEXT = notes_adm.TEXT.str.replace('\n', ' ')
     notes_adm.TEXT = notes_adm.TEXT.str.replace('\r', ' ')
+    notes_adm['TEXT'] = notes_adm['TEXT'].str.lower()
     notes_adm['TEXT'].replace(' ', np.nan, inplace=True)
 
     # drop rows with empty discharge summaries
@@ -118,5 +173,8 @@ def get_clean_TEXT_column(notes_adm):
     return notes_adm
 
 
+def get_notes_with_age(notes_adm):
+    notes_adm = get_data_with_age_column(notes_adm)
+    return notes_adm
 
 

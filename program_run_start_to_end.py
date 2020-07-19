@@ -17,7 +17,14 @@ from balance_train_data.smote_sample import get_smote_data
 
 
 # variable to check if the model is run on validation or test set
+# False - run on test set; True - run on validation set
 results_on_validation = False
+filter_by_age = True
+filter_multiple_diseases = True
+age_min = 45
+age_max = 1000
+
+ages = [[45, 1000], [45, 80], [50, 1000], [50, 80]]
 
 
 def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ngram_max):
@@ -34,6 +41,8 @@ def predict_test_validation_set(threshold, balancing_type, solver, ngram_min, ng
     notes_adm = get_clean_dataframe()
 
     print(notes_adm['OUTPUT'].value_counts())
+
+    # notes_adm.to_csv('some_output_to_test4.csv')
 
     # all data split into train, test and validation sets
     # treat validation set as test set for now
@@ -106,6 +115,7 @@ def balance_and_run_test_valid_LR(balancing_type, train, test, threshold, solver
              prediction_probs: list of prediction probabilities for the test set, needed to plot the AUC
     """
 
+    global age_min, age_max
     # balance train data set
     if balancing_type == "SMOTE":
 
@@ -127,12 +137,80 @@ def balance_and_run_test_valid_LR(balancing_type, train, test, threshold, solver
     print(train_OUTPUT.value_counts())
 
     predicted_OUTPUT, prediction_probs = get_predicted_on_test_LR(train_TEXT,
-                                                                      train_OUTPUT,
-                                                                      test_TEXT,
-                                                                      threshold=threshold,
-                                                                      solver=solver)
+                                                                  train_OUTPUT,
+                                                                  test_TEXT,
+                                                                  threshold=threshold,
+                                                                  solver=solver)
+
+    if filter_by_age:
+        for a in ages:
+            age_min = a[0]
+            age_max = a[1]
+            confusion_matrix_age_filter(age_min, age_max, test, predicted_OUTPUT.copy())
+
+    if filter_multiple_diseases:
+        confusion_matrix_multiple_diseases(test, predicted_OUTPUT.copy(), 3)
+        confusion_matrix_multiple_diseases(test, predicted_OUTPUT.copy(), 4)
 
     return predicted_OUTPUT, prediction_probs
+
+
+def confusion_matrix_age_filter(age_min, age_max, test, predicted_OUTPUT_with_age):
+    count = 0
+    for i, row in test.iterrows():
+        if (row['AGE'] < age_min or row['AGE'] > age_max) and predicted_OUTPUT_with_age[count] == 1:
+            predicted_OUTPUT_with_age[count] = 0
+        count += 1
+
+    cnf_matrix = metrics.confusion_matrix(test.OUTPUT, predicted_OUTPUT_with_age)
+
+    class_names = [0, 1]
+    fig, ax = cnf_plt.subplots()
+    tick_marks = np.arange(len(class_names))
+    cnf_plt.xticks(tick_marks, class_names, fontsize=14)
+    cnf_plt.yticks(tick_marks, class_names, fontsize=14)
+
+    # create heatmap
+    sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, annot_kws={"size": 22}, cmap="YlGnBu", fmt='g')
+    ax.xaxis.set_label_position("top")
+    cnf_plt.tight_layout()
+    cnf_plt.title('Confusion Matrix', y=1.1, fontsize=14)
+    cnf_plt.ylabel('Actual label', fontsize=14)
+    cnf_plt.xlabel('Predicted label', fontsize=14)
+    conf_matrix_fig = cnf_plt.gcf()
+    conf_matrix_fig.tight_layout()
+    cnf_plt.draw()
+    conf_matrix_fig.savefig('plots/conf_matrix_age_{}_to_{}.png'.format(age_min, age_max))
+    cnf_plt.clf()
+
+
+def confusion_matrix_multiple_diseases(test, predicted_OUTPUT_multiple_diseases, number_of_diseases):
+    count = 0
+    for i, row in test.iterrows():
+        if (len(row['DIAGNOSIS'].split(';'))) >= number_of_diseases and predicted_OUTPUT_multiple_diseases[count] == 1:
+            predicted_OUTPUT_multiple_diseases[count] = 0
+        count += 1
+
+    cnf_matrix = metrics.confusion_matrix(test.OUTPUT, predicted_OUTPUT_multiple_diseases)
+
+    class_names = [0, 1]
+    fig, ax = cnf_plt.subplots()
+    tick_marks = np.arange(len(class_names))
+    cnf_plt.xticks(tick_marks, class_names, fontsize=14)
+    cnf_plt.yticks(tick_marks, class_names, fontsize=14)
+
+    # create heatmap
+    sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, annot_kws={"size": 22}, cmap="YlGnBu", fmt='g')
+    ax.xaxis.set_label_position("top")
+    cnf_plt.tight_layout()
+    cnf_plt.title('Confusion Matrix', y=1.1, fontsize=14)
+    cnf_plt.ylabel('Actual label', fontsize=14)
+    cnf_plt.xlabel('Predicted label', fontsize=14)
+    conf_matrix_fig = cnf_plt.gcf()
+    conf_matrix_fig.tight_layout()
+    cnf_plt.draw()
+    conf_matrix_fig.savefig('plots/conf_matrix_{}_diseases_dismissed.png'.format(number_of_diseases))
+    cnf_plt.clf()
 
 
 def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngram_min, ngram_max):
@@ -151,7 +229,7 @@ def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngr
              predicted_OUTPUT: list of predicted output values for the test set
              prediction_probs: list of prediction probabilities for the test set, needed to plot the AUC
     """
-
+    '''
     # balance train data set
     if balancing_type == "SMOTE":
 
@@ -176,8 +254,12 @@ def balance_and_run_train_LR(balancing_type, train, test, threshold, solver, ngr
                                                                        train_OUTPUT,
                                                                        threshold=threshold,
                                                                        solver=solver)
+    '''
 
-    return train_OUTPUT, predicted_OUTPUT, prediction_probs
+    predicted_OUTPUT, prediction_probs = get_predicted_on_train_LR(train, threshold, solver, balancing_type,
+                                                                   ngram_min, ngram_max)
+
+    return train.OUTPUT, predicted_OUTPUT, prediction_probs
 
 
 def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type,
@@ -190,12 +272,12 @@ def plot_evaluation_metrics(test_OUTPUT, predicted_OUTPUT, prediction_probs, bal
     @param prediction_probs: list of prediction probabilities for the test set, needed to plot the AUC
     """
 
-    # illustrate word importance
-    plot_word_importance()
-
     # evaluating the model
     cnf_matrix = get_confusion_matrix(test_OUTPUT, predicted_OUTPUT)
-    plot_confusion_matrix(cnf_matrix)
+    plot_confusion_matrix(cnf_matrix, threshold, balancing_type, solver, ngram_min, ngram_max)
 
     # illustrate area under the ROC curve
     plot_AUC(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, solver, threshold, ngram_min, ngram_max)
+
+    # illustrate word importance
+    plot_word_importance()

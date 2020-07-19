@@ -9,7 +9,14 @@ from balance_train_data.vectorize_text import get_feature_names
 from sklearn.model_selection import cross_val_predict
 global model
 import pickle
+import pandas as pd
 from sklearn.externals import joblib
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+from balance_train_data.over_sampling_positives import get_over_sampling_positives_data
+from balance_train_data.sub_sampling_negatives import get_sub_sampling_negatives_data
+from balance_train_data.smote_sample import get_smote_data
+from balance_train_data.vectorize_text import get_vectorized_train_test
 
 
 def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, solver):
@@ -44,7 +51,7 @@ def get_predicted_on_test_LR(train_TEXT, train_OUTPUT, test_TEXT, threshold, sol
     return predicted_OUTPUT, prediction_probs
 
 
-def get_predicted_on_train_LR(train_TEXT, train_OUTPUT, threshold, solver):
+def get_predicted_on_train_LR(train, threshold, solver, balancing_type, ngram_min, ngram_max):
     """Create Logistic Regression model on the train data. Calculate probability of having lung cancer for each patient
     Classify patients to positives and negatives depending on the threshold
 
@@ -61,13 +68,88 @@ def get_predicted_on_train_LR(train_TEXT, train_OUTPUT, threshold, solver):
     # logistic regression
     model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
 
-    predicted_probs = cross_val_predict(model, train_TEXT, train_OUTPUT, cv=5, method='predict_proba')
-    predicted_probs = predicted_probs[:, 1]
+    #predicted_probs = cross_val_predict(model, train_TEXT, train_OUTPUT, cv=5, method='predict_proba')
+    #predicted_probs = predicted_probs[:, 1]
+
+    train_TEXT = train[['TEXT']]
+    train_OUTPUT = train[['OUTPUT']]
+    print(train_TEXT)
+    # KFold Cross Validation approach
+    kf = KFold(n_splits=5, shuffle=False)
+    kf.split(train_TEXT)
+
+    # Initialize the accuracy of the models to blank list. The accuracy of each model will be appended to this list
+    predicted_probs = []
+
+    # Iterate over each train-test split
+    for train_index, test_index in kf.split(train_TEXT):
+        # Split train-test
+        model = LogisticRegression(C=0.0001, penalty='l2', solver=solver)
+
+        X_train, X_test = train_TEXT.iloc[train_index], \
+                          train_TEXT.iloc[test_index]
+        y_train, y_test = train_OUTPUT.iloc[train_index], \
+                          train_OUTPUT.iloc[test_index]
+
+        print('sick people count in test set: ')
+        print(y_test['OUTPUT'].value_counts())
+
+        # balance train data
+        X_train = pd.concat([X_train, y_train]).reindex(index=X_train.index, columns=X_train.columns)
+       # X_train['OUTPUT'] = y_train['OUTPUT']
+        X_train.reset_index(drop=True)
+
+        X_test['OUTPUT'] = y_test['OUTPUT']
+        X_test.reset_index(drop=True)
+
+        print('eina 1')
+        #print(new_train_dataset)
+        #print(new_test_dataset)
+        train_TEXT_part, train_OUTPUT_part, test_TEXT_part = get_balanced_data(balancing_type, X_train,
+                                                                               X_test,
+                                                                ngram_min, ngram_max)
+        print('sick value count on train data when kfold: ')
+        print(train_OUTPUT_part.value_counts())
+        # Train the model
+        model = model.fit(train_TEXT_part, train_OUTPUT_part)
+        # Append to accuracy_model the accuracy of the model
+        ##predicted_probs.extend(model.predict_proba(test_TEXT_part)[:, 1])
+
+        #print('predicted ', predicted_probs)
+        #print('actual for tis try ', y_test)
+    print('praejo visus')
+    # Print the accuracy
+    print(type(predicted_probs))
+    print('length of predicted_probs ', len(predicted_probs))
 
     # classify samples into two classes depending on the probabilities
     predicted_OUTPUT = np.where(predicted_probs > threshold, 1, 0)
 
     return predicted_OUTPUT, predicted_probs
+
+
+def get_balanced_data(balancing_type, train, test, ngram_min, ngram_max):
+
+    if balancing_type == "SMOTE":
+
+        # vectorize the TEXT column and then balance the train data
+        train_TEXT, train_OUTPUT, test_TEXT = get_smote_data(train, test, ngram_min, ngram_max)
+
+    else:
+
+        # balance the train data and then vectorize the TEXT column
+        if balancing_type == "sub-sample negatives":
+            train = get_sub_sampling_negatives_data(train)
+
+        elif balancing_type == "over-sample positives":
+            train = get_over_sampling_positives_data(train)
+
+        print('eina2')
+        train_TEXT, test_TEXT = get_vectorized_train_test(train, test, ngram_min, ngram_max)
+        train_OUTPUT = train.OUTPUT
+
+    return train_TEXT, train_OUTPUT, test_TEXT
+
 
 
 def plot_word_importance():

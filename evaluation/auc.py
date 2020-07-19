@@ -36,7 +36,7 @@ def plot_AUC(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, so
         'Solver:  {}'.format(solver),
         'Threshold:  {}'.format(threshold),
         'N-grams:  ({}, {})'.format(ngram_min, ngram_max),
-        'AUC:  {} (CI {} - {})'.format(round(model_auc, 2),
+        'AUC:  {} (CI {} - {})'.format(round(model_auc, 3),
                                        round(model_auc - interval/2, 3),
                                        round(model_auc + interval/2, 3)),
         'Recall:  %.3f' % (recall,),
@@ -61,7 +61,8 @@ def plot_AUC(test_OUTPUT, predicted_OUTPUT, prediction_probs, balancing_type, so
 
     plt_fig = auc_plt.gcf()
     plt_fig.tight_layout()
-    plt_fig.savefig('plots/auc_plt.png')
+    plt_fig.savefig('plots/auc_{}_{}_{}_ngram_{}_{}.png'.format(balancing_type, solver, threshold,
+                                                 ngram_min, ngram_max))
 
 
 def get_text_coordinates(balancing_type):
