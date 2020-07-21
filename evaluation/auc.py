@@ -1,3 +1,4 @@
+
 from sklearn import metrics
 import matplotlib.pyplot as auc_plt
 from math import sqrt
@@ -89,3 +90,5 @@ def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     auc_plt.xlabel("Decision Threshold")
     auc_plt.legend(loc='best')
     auc_plt.show()
+    auc_plt.clf()  # TK
+    auc_ply.close() # TK

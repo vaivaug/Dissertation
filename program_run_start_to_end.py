@@ -18,9 +18,9 @@ from balance_train_data.smote_sample import get_smote_data
 
 # variable to check if the model is run on validation or test set
 # False - run on test set; True - run on validation set
-results_on_validation = False
-filter_by_age = True
-filter_multiple_diseases = True
+results_on_validation = True
+filter_by_age = False
+filter_multiple_diseases = False
 age_min = 45
 age_max = 1000
 

@@ -40,3 +40,4 @@ def plot_confusion_matrix(cnf_matrix, threshold, balancing_type, solver, ngram_m
     conf_matrix_fig.savefig('plots/conf_{}_{}_{}_ngram_{}_{}.png'.format(balancing_type, solver, threshold,
                                                                          ngram_min, ngram_max))
     cnf_plt.clf()
+    cnf_plt.close() # TK
