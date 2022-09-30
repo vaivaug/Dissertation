@@ -1,7 +1,7 @@
 cycler==0.10.0
 imbalanced-learn==0.6.2
 imblearn==0.0
-joblib==0.14.1
+joblib==1.2.0
 kiwisolver==1.1.0
 matplotlib==3.1.3
 metrics==0.3.3
